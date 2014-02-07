@@ -7,3 +7,78 @@ GET     /                           controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+
+# Module MEMBER
+
+#POST    /Member/login               controllers.Member.login()
+#POST    /Member/register            controllers.Member.register()
+#POST    /Member/logout              controllers.Member.logout()
+#POST    /Member/remove              controllers.Member.remove()
+#POST    /Member/modify              controllers.Member.modify()
+#POST    /Member/list                controllers.Member.getList()
+#POST    /Member/get                 controllers.Member.get()
+#POST    /Member/find                controllers.Member.find()
+
+# Module supplier
+
+#POST    /Supplier/create            controllers.Supplier.create()
+#POST    /Supplier/modify            controllers.Supplier.modify()
+#POST    /Supplier/delete            controllers.Supplier.delete()
+#POST    /Supplier/get               controllers.Supplier.get()
+#POST    /Supplier/list              controllers.Supplier.list()
+#POST    /Supplier/find              controllers.Supplier.find()
+
+#Module manufacture
+
+#POST    /Manufacture/create         controllers.Manufacture.create()
+#POST    /Manufacture/modify         controllers.Manufacture.modify()
+#POST    /Manufacture/delete         controllers.Manufacture.delete()
+#POST    /Manufacture/get            controllers.Manufacture.get()
+#POST    /Manufacture/list           controllers.Manufacture.list()
+#POST    /Manufacture/find           controllers.Manufacture.find()
+
+#Module PRODUCT
+
+#POST    /Product/create             controllers.Product.create()
+#POST    /Product/modify             controllers.Product.modify()
+#POST    /Product/delete             controllers.Product.delete()
+#POST    /Product/get                controllers.Product.get()
+#POST    /Product/list               controllers.Product.list()
+#POST    /Product/find               controllers.Product.find()
+
+#Module BILL
+
+#POST    /Bill/create                controllers.Bill.create()
+#POST    /Bill/modify                controllers.Bill.modify()
+#POST    /Bill/delete                controllers.Bill.delete()
+#POST    /Bill/get                   controllers.Bill.get()
+#POST    /Bill/list                  controllers.Bill.list()
+#POST    /Bill/find                  controllers.Bill.find()
+
+#Module RECEIPT
+
+#POST    /Receipt/create             controllers.Receipt.create()
+#POST    /Receipt/modify             controllers.Receipt.modify()
+#POST    /Receipt/delete             controllers.Receipt.delete()
+#POST    /Receipt/get                controllers.Receipt.get()
+#POST    /Receipt/list               controllers.Receipt.list()
+#POST    /Receipt/find               controllers.Receipt.find()
+
+#Module CUSTOMER
+
+#POST    /Customer/create            controllers.Customer.create()
+#POST    /Customer/modify            controllers.Customer.modify()
+#POST    /Customer/delete            controllers.Customer.delete()
+#POST    /Customer/get               controllers.Customer.get()
+#POST    /Customer/list              controllers.Customer.list()
+#POST    /Customer/find              controllers.Customer.find()
+
+#Module WAREHOUSE
+
+#POST    /Warehouse/create           controllers.Warehouse.create()
+#POST    /Warehouse/modify           controllers.Warehouse.modify()
+#POST    /Warehouse/delete           controllers.Warehouse.delete()
+#POST    /Warehouse/get              controllers.Warehouse.get()
+#POST    /Warehouse/list             controllers.Warehouse.list()
+#POST    /Warehouse/find             controllers.Warehouse.find()
