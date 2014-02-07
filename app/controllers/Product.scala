@@ -12,4 +12,16 @@ import play.api.mvc._
  */
 object Product extends Controller {
 
+  def create() = TODO
+
+  def modify(id:Int) = TODO
+
+  def delete(id:Int) = TODO
+
+  def get(id:Int) = TODO
+
+  def list(page:Int, count:Int) = TODO
+
+  def find(keyword:String, option:String) = TODO
+
 }

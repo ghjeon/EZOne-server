@@ -6,6 +6,8 @@ import anorm._
 import anorm.SqlParser._
 
 import spray.json._
+
+import util.structure._
 /**
  * Project IntelliJ IDEA
  * Module structure
@@ -41,6 +43,75 @@ object Manufacture
         => Manufacture(manufacture_srl, manufacture_name, manufacture_type, manufacture_address, manufacture_phone, manufacture_charger, manufacture_mobile, manufacture_created, manufacture_updated)
     }
   }
+
+  def findAll(page:Int, count:Int, orderBy:String, orderType:String) = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        SQL("SELECT * from manufacture order by {orderBy} " + validateOrderType(orderType) + " limit {page}, {count}")
+          .on("orderBy"->toParameterValue("manufacture_" + orderBy),
+              "page"->getPageIndex(page, count),
+              "count"->count).as(this.parser *)
+      } catch {
+        case e => null
+      }
+  }
+
+  def findById(srl:Pk[Int]):Manufacture = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        SQL("SELECT * from manufacture where manufacture_srl = {srl};")
+          .on("srl"->srl.get)
+          .using(this.parser).single()
+      } catch {
+        case e=> null
+      }
+  }
+
+  def create(m:Manufacture):Manufacture = DB.withConnection
+  {
+    implicit connection =>
+      val insertRow = SQL("INSERT INTO manufacture(manufacture_name, manufacture_type, manufacture_address, manufacture_phone, manufacture_charger, manufacture_mobile, manufacture_created, manufacture_updated) " +
+        "values ({name}, {type}, {address}, {phone}, {charger}, {mobile}, {created}, {updated}); ")
+        .on("name"->m.manufacture_name,
+            "type"->m.manufacture_type,
+            "address"->m.manufacture_address,
+            "phone"->m.manufacture_phone,
+            "charger"->m.manufacture_charger,
+            "mobile"->m.manufacture_mobile,
+            "created"->m.manufacture_created,
+            "updated"->m.manufacture_updated).executeInsert(scalar[Long].single).toInt
+
+      findById(new Id(insertRow))
+  }
+
+  def update(m:Manufacture):Manufacture = DB.withConnection
+  {
+    implicit connection =>
+      val updateRow = SQL("UPDATE manufacture set manufacture_name = {name}, " +
+                                                 "manufacture_type = {type}, " +
+                                                 "manufacture_address = {address}, " +
+                                                 "manufacture_phone = {phone}, " +
+                                                 "manufacture_charger = {charger}, " +
+                                                 "manufacture_mobile = {mobile}, " +
+                                                 "manufacture_updated = {updated} " +
+                                                 "where manufacture_srl = {id};")
+      .on("name"->m.manufacture_name,
+          "type"->m.manufacture_type,
+          "address"->m.manufacture_address,
+          "phone"->m.manufacture_phone,
+          "charger"->m.manufacture_charger,
+          "mobile"->m.manufacture_mobile,
+          "updated"->m.manufacture_updated,
+          "id"->m.manufacture_srl.get).executeUpdate()
+
+      findById(m.manufacture_srl)
+  }
+
+
 }
 
 object ManufactureFormatter extends DefaultJsonProtocol
