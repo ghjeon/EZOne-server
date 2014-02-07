@@ -10,7 +10,7 @@ package util
 object dummy {
 
   val dummyList:List[String] = List()
-
+  val dummyListInt:List[Int] = List(0)
 
 
 }

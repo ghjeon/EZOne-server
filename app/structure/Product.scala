@@ -7,6 +7,8 @@ import anorm.SqlParser._
 
 import spray.json._
 
+import util.structure._
+
 /**
  * Project IntelliJ IDEA
  * Module structure
@@ -44,6 +46,78 @@ object Product
       case product_srl ~ product_code ~ product_name ~ product_size ~ product_purchase_price ~ product_sale_price ~ product_stock ~ product_supplier_srl ~ product_manufacture_srl ~ product_created ~ product_updated 
         => Product(product_srl, product_code, product_name, product_size, product_purchase_price, product_sale_price, product_stock, product_supplier_srl, product_manufacture_srl, product_created, product_updated)
     }
+  }
+
+  def findAll(page:Int, count:Int, orderBy:String, orderType:String) = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        SQL("SELECT * from product order by {orderBy} " + validateOrderType(orderType) + " limit {page}, {count}")
+          .on("orderBy"->toParameterValue("manufacture_" + orderBy),
+          "page"->getPageIndex(page, count),
+          "count"->count).as(this.parser *)
+      } catch {
+        case e => null
+      }
+  }
+
+  def findById(id:Pk[Int]):Product = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        SQL("SELECT * from product where product_srl = {srl};")
+          .on("srl"->id.get).using(this.parser).single()
+      } catch {
+        case e=> null
+      }
+  }
+
+  def create(p:Product):Product = DB.withConnection
+  {
+    implicit connection =>
+      val insertRow = SQL("INSERT INTO product(product_code, product_name, product_size, product_purchase_price, product_sale_price, product_stock, product_supplier_srl, product_manufacture_srl, product_created, product_updated) " +
+        "values ({code}, {name], {size}, {purchase_price}, {sale_price}, {stock}, {supplier_srl}, {manufacture_srl}, {created}, {updated}); ")
+        .on("code"->p.product_code,
+            "name"->p.product_name,
+            "size"->p.product_size,
+            "purchase_price"->p.product_purchase_price,
+            "sale_price"->p.product_sale_price,
+            "stock"->p.product_stock,
+            "supplier_srl"->p.product_supplier_srl,
+            "manufacture_srl"->p.product_manufacture_srl,
+            "created"->p.product_created,
+            "updated"->p.product_updated).executeInsert(scalar[Long].single).toInt
+
+      findById(new Id(insertRow))
+  }
+
+  def update(p:Product):Product = DB.withConnection
+  {
+    implicit connection =>
+      val updateRow = SQL("UPDATE product set " +
+                          "product_name = {name}, " +
+                          "product_size = {size}, " +
+                          "product_purchase_price = {purchase_price}, " +
+                          "product_sale_price = {sale_price}, " +
+                          "product_stock = {stock}, " +
+                          "product_supplier_srl = {supplier_srl}, " +
+                          "product_manufacture_srl = {manufacture_srl}, " +
+                          "product_updated = {updated} " +
+                          "where product_srl = {srl} AND product_code = {code};")
+      .on("name"->p.product_name,
+          "size"->p.product_size,
+          "purchase_price"->p.product_purchase_price,
+          "sale_price"->p.product_sale_price,
+          "stock"->p.product_stock,
+          "supplier_srl"->p.product_supplier_srl,
+          "manufacture_srl"->p.product_manufacture_srl,
+          "updated"->p.product_updated,
+          "srl"->p.product_srl.get,
+          "code"->p.product_code).executeUpdate()
+
+      findById(p.product_srl)
   }
 }
 

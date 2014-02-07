@@ -44,7 +44,7 @@ POST    /Product/create                         controllers.Product.create()
 PUT     /Product/modify/:id                     controllers.Product.modify(id:Int)
 DELETE  /Product/delete/:id                     controllers.Product.delete(id:Int)
 GET     /Product/get/:id                        controllers.Product.get(id:Int)
-GET     /Product/list/:page                     controllers.Product.list(page:Int, count:Int)
+GET     /Product/list/:page                     controllers.Product.list(page:Int, count:Int, orderby:String, orderType:String)
 GET     /Product/find/:keyword/:option          controllers.Product.find(keyword:String, option:String)
 
 #Module BILL
