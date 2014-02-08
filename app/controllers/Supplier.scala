@@ -19,6 +19,7 @@ object Supplier extends Controller {
       val body:Map[String, Seq[String]] = request.body
 
       val supplier_name = body.getOrElse("name", util.dummy.dummyList)(0)
+      val supplier_reg_no = body.getOrElse("reg_no", util.dummy.dummyList)(0)
       val supplier_address:String = body.getOrElse("address", util.dummy.dummyList)(0)
       val supplier_phone = body.getOrElse("phone", util.dummy.dummyList)(0)
       val supplier_charger = body.getOrElse("charger", util.dummy.dummyList)(0)
@@ -29,6 +30,7 @@ object Supplier extends Controller {
 
       val supplier = structure.Supplier(NotAssigned,
                                        supplier_name,
+                                       supplier_reg_no,
                                        supplier_phone,
                                        supplier_address,
                                        supplier_charger,
@@ -51,6 +53,7 @@ object Supplier extends Controller {
       val body:Map[String, Seq[String]] = request.body
 
       val supplier_name = body.getOrElse("name", util.dummy.dummyList)(0)
+      val supplier_reg_no = body.getOrElse("reg_no", util.dummy.dummyList)(0)
       val supplier_address:String = body.getOrElse("address", util.dummy.dummyList)(0)
       val supplier_phone = body.getOrElse("phone", util.dummy.dummyList)(0)
       val supplier_charger = body.getOrElse("charger", util.dummy.dummyList)(0)
@@ -60,6 +63,7 @@ object Supplier extends Controller {
 
       val supplier = structure.Supplier(new Id(id),
         supplier_name,
+        supplier_reg_no,
         supplier_phone,
         supplier_address,
         supplier_charger,

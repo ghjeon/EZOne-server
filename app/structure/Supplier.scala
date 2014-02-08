@@ -18,6 +18,7 @@ import util.structure._
  */
 case class Supplier (supplier_srl:Pk[Int],
                      supplier_name:String,
+                     supplier_reg_no:String,
                      supplier_phone:String,
                      supplier_address:String,
                      supplier_charger:String,
@@ -32,6 +33,7 @@ object Supplier
   {
     get[Pk[Int]]("supplier_srl") ~
     get[String]("supplier_name") ~
+    get[String]("supplier_reg_no") ~
     get[String]("supplier_phone") ~
     get[String]("supplier_address") ~
     get[String]("supplier_charger") ~
@@ -40,8 +42,8 @@ object Supplier
     get[Int]("supplier_created") ~
     get[Int]("supplier_updated") map
       {
-        case supplier_srl ~ supplier_name ~ supplier_phone ~ supplier_address ~ supplier_charger ~ supplier_mobile ~ supplier_visiting ~ supplier_created ~ supplier_updated
-          => Supplier(supplier_srl, supplier_name, supplier_phone, supplier_address, supplier_charger, supplier_mobile, supplier_visiting, supplier_created, supplier_updated)
+        case supplier_srl ~ supplier_name ~ supplier_reg_no ~ supplier_phone ~ supplier_address ~ supplier_charger ~ supplier_mobile ~ supplier_visiting ~ supplier_created ~ supplier_updated
+          => Supplier(supplier_srl, supplier_name, supplier_reg_no, supplier_phone, supplier_address, supplier_charger, supplier_mobile, supplier_visiting, supplier_created, supplier_updated)
       }
   }
 
@@ -74,9 +76,10 @@ object Supplier
   def create(s:Supplier):Supplier = DB.withConnection
   {
     implicit connection =>
-      val insertRow = SQL("INSERT INTO supplier(supplier_name, supplier_phone, supplier_address, supplier_charger, supplier_mobile, supplier_visiting, supplier_created, supplier_updated) " +
-        "values ({name}, {phone}, {address}, {charger}, {mobile}, {visiting}, {created}, {updated}); ")
+      val insertRow = SQL("INSERT INTO supplier(supplier_name, supplier_reg_no, supplier_phone, supplier_address, supplier_charger, supplier_mobile, supplier_visiting, supplier_created, supplier_updated) " +
+        "values ({name}, {reg_no}, {phone}, {address}, {charger}, {mobile}, {visiting}, {created}, {updated}); ")
       .on("name"->s.supplier_name,
+          "reg_no"->s.supplier_reg_no,
           "phone"->s.supplier_phone,
           "address"->s.supplier_address,
           "charger"->s.supplier_charger,
@@ -94,6 +97,7 @@ object Supplier
 
       val updateRow = SQL("UPDATE supplier set " +
                           "supplier_name = {name}, " +
+                          "supplier_reg_no = {reg_no}, " +
                           "supplier_phone = {phone}, " +
                           "supplier_address = {address}, " +
                           "supplier_charger = {charger}, " +
@@ -102,6 +106,7 @@ object Supplier
                           "supplier_updated = {updated} " +
                           "where supplier_srl = {id};")
       .on("name"->s.supplier_name,
+        "reg_no"->s.supplier_reg_no,
         "phone"->s.supplier_phone,
         "address"->s.supplier_address,
         "charger"->s.supplier_charger,
@@ -121,6 +126,7 @@ object SupplierFormatter extends DefaultJsonProtocol
     def write(s:Supplier) = JsObject(
       "supplier_srl" -> JsNumber(s.supplier_srl.get),
       "supplier_name" -> JsString(s.supplier_name),
+      "supplier_reg_no" -> JsString(s.supplier_reg_no),
       "supplier_phone" -> JsString(s.supplier_phone),
       "supplier_address" -> JsString(s.supplier_address),
       "supplier_charger" -> JsString(s.supplier_charger),
@@ -132,10 +138,10 @@ object SupplierFormatter extends DefaultJsonProtocol
 
     def read(v:JsValue) =
     {
-      v.asJsObject.getFields("supplier_srl", "supplier_name", "supplier_phone", "supplier_address", "supplier_charger", "supplier_mobile", "supplier_visiting", "supplier_created", "supplier_updated") match
+      v.asJsObject.getFields("supplier_srl", "supplier_name", "supplier_reg_no", "supplier_phone", "supplier_address", "supplier_charger", "supplier_mobile", "supplier_visiting", "supplier_created", "supplier_updated") match
       {
-        case Seq(JsNumber(supplier_srl), JsString(supplier_name), JsString(supplier_phone), JsString(supplier_address), JsString(supplier_charger), JsString(supplier_mobile), JsString(supplier_visiting), JsNumber(supplier_created), JsNumber(supplier_updated))
-          => new Supplier(new Id(supplier_srl.toInt), supplier_name, supplier_phone, supplier_address, supplier_charger, supplier_mobile, supplier_visiting, supplier_created.toInt, supplier_updated.toInt)
+        case Seq(JsNumber(supplier_srl), JsString(supplier_name), JsString(supplier_reg_no), JsString(supplier_phone), JsString(supplier_address), JsString(supplier_charger), JsString(supplier_mobile), JsString(supplier_visiting), JsNumber(supplier_created), JsNumber(supplier_updated))
+          => new Supplier(new Id(supplier_srl.toInt), supplier_name, supplier_reg_no, supplier_phone, supplier_address, supplier_charger, supplier_mobile, supplier_visiting, supplier_created.toInt, supplier_updated.toInt)
       }
     }
   }
