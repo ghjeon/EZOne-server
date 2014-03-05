@@ -91,7 +91,7 @@ object Product
       try
       {
         SQL("SELECT * from product_extend order by {orderBy} " + validateOrderType(orderType) + " limit {page}, {count}")
-          .on("orderBy"->toParameterValue("manufacture_" + orderBy),
+          .on("orderBy"->toParameterValue("product_" + orderBy),
           "page"->getPageIndex(page, count),
           "count"->count).as(ProductExtend.parser *)
       } catch {
