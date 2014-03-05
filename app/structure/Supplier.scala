@@ -61,6 +61,30 @@ object Supplier
       }
   }
 
+  def findByOption(target:String, keyword:String, option:String):List[Supplier] = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        val keywordType:String = target match {
+          case "srl" => "Int"
+          case "created" => "Int"
+          case "updated" => "Int"
+          case _ => "String"
+        }
+
+        val query = SQL("SELECT * from supplier where " + target + " " + option + " {keyword}")
+        if(keywordType == "String")
+          query.on("keyword"->keyword).as(this.parser *)
+        else if(keywordType == "Int")
+          query.on("keyword"->keyword.toInt).as(this.parser *)
+        else
+          null
+      } catch {
+        case e => null
+      }
+  }
+
   def findById(id:Pk[Int]):Supplier = DB.withConnection
   {
     implicit connection =>

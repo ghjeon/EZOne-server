@@ -28,6 +28,43 @@ case class Product(product_srl:Pk[Int] = NotAssigned,
                    product_created:Int,
                    product_updated:Int)
 
+case class ProductExtend(product_srl:Pk[Int] = NotAssigned,
+                         product_code:String,
+                         product_name:String,
+                         product_size:String,
+                         product_purchase_price:Int,
+                         product_sale_price:Int,
+                         product_stock:Int,
+                         product_supplier_srl:Int,
+                         product_supplier_name:String,
+                         product_manufacture_srl:Int,
+                         product_manufacture_name:String,
+                         product_created:Int,
+                         product_updated:Int)
+
+object ProductExtend
+{
+  val parser =
+  {
+    get[Pk[Int]]("product_srl") ~
+    get[String]("product_code") ~
+    get[String]("product_name") ~
+    get[String]("product_size") ~
+    get[Int]("product_purchase_price") ~
+    get[Int]("product_sale_price") ~
+    get[Int]("product_stock") ~
+    get[Int]("product_supplier_srl") ~
+    get[String]("product_supplier_name") ~
+    get[Int]("product_manufacture_srl") ~
+    get[String]("product_manufacture_name") ~
+    get[Int]("product_created") ~
+    get[Int]("product_updated") map {
+      case product_srl ~ product_code ~ product_name ~ product_size ~ product_purchase_price ~ product_sale_price ~ product_stock ~ product_supplier_srl ~ product_supplier_name ~ product_manufacture_srl ~ product_manufacture_name ~ product_created ~ product_updated
+        => ProductExtend(product_srl, product_code, product_name, product_size, product_purchase_price, product_sale_price, product_stock, product_supplier_srl, product_supplier_name, product_manufacture_srl, product_manufacture_name, product_created, product_updated)
+    }
+  }
+}
+
 object Product
 {
   val parser =
@@ -53,28 +90,65 @@ object Product
     implicit connection =>
       try
       {
-        SQL("SELECT * from product order by {orderBy} " + validateOrderType(orderType) + " limit {page}, {count}")
+        SQL("SELECT * from product_extend order by {orderBy} " + validateOrderType(orderType) + " limit {page}, {count}")
           .on("orderBy"->toParameterValue("manufacture_" + orderBy),
           "page"->getPageIndex(page, count),
-          "count"->count).as(this.parser *)
+          "count"->count).as(ProductExtend.parser *)
       } catch {
         case e => null
       }
   }
 
-  def findById(id:Pk[Int]):Product = DB.withConnection
+  def findByOption(target:String, keyword:String, option:String):List[ProductExtend] = DB.withConnection
   {
     implicit connection =>
       try
       {
-        SQL("SELECT * from product where product_srl = {srl};")
-          .on("srl"->id.get).using(this.parser).single()
+        val keywordType:String = target match {
+          case "srl" => "Int"
+          case "created" => "Int"
+          case "updated" => "Int"
+          case _ => "String"
+        }
+
+        val query = SQL("SELECT * from product_extend where " + target + " " + option + " {keyword}")
+        if(keywordType == "String")
+          query.on("keyword"->keyword).as(ProductExtend.parser *)
+        else if(keywordType == "Int")
+          query.on("keyword"->keyword.toInt).as(ProductExtend.parser *)
+        else
+          null
+      } catch {
+        case e => null
+      }
+  }
+
+  def findLastCode(id:Int):Product = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        SQL("SELECT * from product where product_supplier_srl = {srl} order by product_created desc limit 1")
+          .on("srl"->id)
+          .using(this.parser).single()
+      } catch {
+        case e => null
+      }
+  }
+
+  def findById(id:Pk[Int]):ProductExtend = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        SQL("SELECT * from product_extend where product_srl = {srl};")
+          .on("srl"->id.get).using(ProductExtend.parser).single()
       } catch {
         case e=> null
       }
   }
 
-  def create(p:Product):Product = DB.withConnection
+  def create(p:Product):ProductExtend = DB.withConnection
   {
     implicit connection =>
       val insertRow = SQL("INSERT INTO product(product_code, product_name, product_size, product_purchase_price, product_sale_price, product_stock, product_supplier_srl, product_manufacture_srl, product_created, product_updated) " +
@@ -93,7 +167,7 @@ object Product
       findById(new Id(insertRow))
   }
 
-  def update(p:Product):Product = DB.withConnection
+  def update(p:Product):ProductExtend = DB.withConnection
   {
     implicit connection =>
       val updateRow = SQL("UPDATE product set " +
@@ -143,6 +217,32 @@ object ProductFormatter extends DefaultJsonProtocol
       v.asJsObject.getFields("product_srl", "product_code", "product_name", "product_size", "product_purchase_price", "product_sale_price", "product_stock", "product_supplier_srl", "product_manufacture_srl", "product_created", "product_updated") match {
         case Seq(JsNumber(product_srl), JsString(product_code), JsString(product_name), JsString(product_size), JsNumber(product_purchase_price), JsNumber(product_sale_price), JsNumber(product_stock), JsNumber(product_supplier_srl), JsNumber(product_manufacture_srl), JsNumber(product_created), JsNumber(product_updated))
           => new Product(new Id(product_srl.toInt), product_code, product_name, product_size, product_purchase_price.toInt, product_sale_price.toInt, product_stock.toInt, product_supplier_srl.toInt, product_manufacture_srl.toInt, product_created.toInt, product_updated.toInt)
+      }
+    }
+  }
+
+  implicit object ProductExtendJsonFormat extends RootJsonFormat[ProductExtend]
+  {
+    def write(p:ProductExtend) = JsObject(
+      "product_srl" -> JsNumber(p.product_srl.get),
+      "product_code" -> JsString(p.product_code),
+      "product_name" -> JsString(p.product_name),
+      "product_size" -> JsString(p.product_size),
+      "product_purchase_price" -> JsNumber(p.product_purchase_price),
+      "product_sale_price" -> JsNumber(p.product_sale_price),
+      "product_stock" -> JsNumber(p.product_stock),
+      "product_supplier_srl" -> JsNumber(p.product_supplier_srl),
+      "product_supplier_name" -> JsString(p.product_supplier_name),
+      "product_manufacture_srl" -> JsNumber(p.product_manufacture_srl),
+      "product_manufacture_name" -> JsString(p.product_manufacture_name),
+      "product_created" -> JsNumber(p.product_created),
+      "product_updated" -> JsNumber(p.product_updated)
+    )
+    def read(v:JsValue) =
+    {
+      v.asJsObject.getFields("product_srl", "product_code", "product_name", "product_size", "product_purchase_price", "product_sale_price", "product_stock", "product_supplier_srl", "product_supplier_name", "product_manufacture_srl", "product_manufacture_name", "product_created", "product_updated") match {
+        case Seq(JsNumber(product_srl), JsString(product_code), JsString(product_name), JsString(product_size), JsNumber(product_purchase_price), JsNumber(product_sale_price), JsNumber(product_stock), JsNumber(product_supplier_srl), JsString(product_supplier_name), JsNumber(product_manufacture_srl), JsString(product_manufacture_name), JsNumber(product_created), JsNumber(product_updated))
+        => new ProductExtend(new Id(product_srl.toInt), product_code, product_name, product_size, product_purchase_price.toInt, product_sale_price.toInt, product_stock.toInt, product_supplier_srl.toInt, product_supplier_name, product_manufacture_srl.toInt, product_manufacture_name, product_created.toInt, product_updated.toInt)
       }
     }
   }

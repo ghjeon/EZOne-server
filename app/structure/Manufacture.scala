@@ -71,6 +71,30 @@ object Manufacture
       }
   }
 
+  def findByOption(target:String, keyword:String, option:String):List[Manufacture] = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        val keywordType:String = target match {
+          case "srl" => "Int"
+          case "created" => "Int"
+          case "updated" => "Int"
+          case _ => "String"
+        }
+
+        val query = SQL("SELECT * from manufacture where " + target + " " + option + " {keyword}")
+        if(keywordType == "String")
+          query.on("keyword"->keyword).as(this.parser *)
+        else if(keywordType == "Int")
+          query.on("keyword"->keyword.toInt).as(this.parser *)
+        else
+          null
+      } catch {
+        case e => null
+      }
+  }
+
   def create(m:Manufacture):Manufacture = DB.withConnection
   {
     implicit connection =>

@@ -3,10 +3,10 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET           /                                         controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET           /assets/*file                             controllers.Assets.at(path="/public", file)
 
 
 # Module MEMBER
@@ -22,30 +22,31 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Module supplier
 
-POST    /Supplier/create                        controllers.Supplier.create()
-PUT     /Supplier/modify/:id                    controllers.Supplier.modify(id:Int)
-DELETE  /Supplier/delete/:id                    controllers.Supplier.delete(id:Int)
-GET     /Supplier/get/:id                       controllers.Supplier.get(id:Int)
-GET     /Supplier/list/:page                    controllers.Supplier.list(page:Int, count:Int, orderby:String, orderType:String)
-GET     /Supplier/find/:keyword/:option         controllers.Supplier.find(keyword:String, option:String)
+POST          /Supplier/create                          controllers.Supplier.create()
+PUT           /Supplier/modify/:id                      controllers.Supplier.modify(id:Int)
+DELETE        /Supplier/delete/:id                      controllers.Supplier.delete(id:Int)
+GET           /Supplier/get/:id                         controllers.Supplier.get(id:Int)
+GET           /Supplier/list/:page                      controllers.Supplier.list(page:Int, count:Int, orderby:String, orderType:String)
+GET           /Supplier/find/:target/:keyword           controllers.Supplier.find(target:String, keyword:String, option:String)
 
 #Module manufacture
 
-POST    /Manufacture/create                     controllers.Manufacture.create()
-PUT     /Manufacture/modify/:id                 controllers.Manufacture.modify(id:Int)
-DELETE  /Manufacture/delete/:id                 controllers.Manufacture.delete(id:Int)
-GET     /Manufacture/get/:id                    controllers.Manufacture.get(id:Int)
-GET     /Manufacture/list/:page                 controllers.Manufacture.list(page:Int, count:Int, orderby:String, orderType:String)
-GET     /Manufacture/find/:keyword/:option      controllers.Manufacture.find(keyword:String, option:String)
+POST          /Manufacture/create                       controllers.Manufacture.create()
+PUT           /Manufacture/modify/:id                   controllers.Manufacture.modify(id:Int)
+DELETE        /Manufacture/delete/:id                   controllers.Manufacture.delete(id:Int)
+GET           /Manufacture/get/:id                      controllers.Manufacture.get(id:Int)
+GET           /Manufacture/list/:page                   controllers.Manufacture.list(page:Int, count:Int, orderby:String, orderType:String)
+GET           /Manufacture/find/:target/:keyword        controllers.Manufacture.find(target:String, keyword:String, option:String)
 
 #Module PRODUCT
 
-POST    /Product/create                         controllers.Product.create()
-PUT     /Product/modify/:id                     controllers.Product.modify(id:Int)
-DELETE  /Product/delete/:id                     controllers.Product.delete(id:Int)
-GET     /Product/get/:id                        controllers.Product.get(id:Int)
-GET     /Product/list/:page                     controllers.Product.list(page:Int, count:Int, orderby:String, orderType:String)
-GET     /Product/find/:keyword/:option          controllers.Product.find(keyword:String, option:String)
+POST          /Product/create                           controllers.Product.create()
+PUT           /Product/modify/:id                       controllers.Product.modify(id:Int)
+DELETE        /Product/delete/:id                       controllers.Product.delete(id:Int)
+GET           /Product/get/:id                          controllers.Product.get(id:Int)
+GET           /Product/list/:page                       controllers.Product.list(page:Int, count:Int, orderby:String, orderType:String)
+GET           /Product/find/:target/:keyword            controllers.Product.find(target:String, keyword:String, option:String)
+GET           /Product/lastCode/:id                     controllers.Product.lastCode(id:String)
 
 #Module BILL
 

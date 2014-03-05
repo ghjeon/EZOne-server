@@ -103,6 +103,26 @@ object Supplier extends Controller {
         Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
   }
 
-  def find(keyword:String, option:String) = TODO
+  def find(target:String, keyword:String, option:String) = Action
+  {
+    request =>
+      var keywordEscape:String = "";
+      val optionEscape:String = option match
+      {
+        case "=" => "="
+        case ">=" => ">="
+        case "<=" => "<="
+        case "like" => "like"
+        case _ => "="
+      }
+      if(optionEscape == "like")
+        keywordEscape = "%" + keyword + "%"
+      val dbResult = structure.Supplier.findByOption("supplier_" + target, keywordEscape, optionEscape)
+      if(dbResult != null)
+        Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
+      else
+        Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
+      Ok("")
+  }
 
 }
