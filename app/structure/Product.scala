@@ -59,8 +59,10 @@ object ProductExtend
     get[String]("manufacture_name") ~
     get[Int]("product_created") ~
     get[Int]("product_updated") map {
-      case product_srl ~ product_code ~ product_name ~ product_size ~ product_purchase_price ~ product_sale_price ~ product_stock ~ product_supplier_srl ~ supplier_name ~ product_manufacture_srl ~ product_manufacture_name ~ product_created ~ product_updated
-        => ProductExtend(product_srl, product_code, product_name, product_size, product_purchase_price, product_sale_price, product_stock, product_supplier_srl, supplier_name, product_manufacture_srl, product_manufacture_name, product_created, product_updated)
+      case product_srl ~ product_code ~ product_name ~ product_size ~ product_purchase_price ~ product_sale_price ~
+        product_stock ~ product_supplier_srl ~ supplier_name ~ product_manufacture_srl ~ product_manufacture_name ~ product_created ~ product_updated
+        => ProductExtend(product_srl, product_code, product_name, product_size, product_purchase_price, product_sale_price, product_stock,
+                         product_supplier_srl, supplier_name, product_manufacture_srl, product_manufacture_name, product_created, product_updated)
     }
   }
 }
@@ -80,8 +82,10 @@ object Product
     get[Int]("product_manufacture_srl") ~
     get[Int]("product_created") ~
     get[Int]("product_updated") map {
-      case product_srl ~ product_code ~ product_name ~ product_size ~ product_purchase_price ~ product_sale_price ~ product_stock ~ product_supplier_srl ~ product_manufacture_srl ~ product_created ~ product_updated 
-        => Product(product_srl, product_code, product_name, product_size, product_purchase_price, product_sale_price, product_stock, product_supplier_srl, product_manufacture_srl, product_created, product_updated)
+      case product_srl ~ product_code ~ product_name ~ product_size ~ product_purchase_price ~ product_sale_price ~
+        product_stock ~ product_supplier_srl ~ product_manufacture_srl ~ product_created ~ product_updated
+        => Product(product_srl, product_code, product_name, product_size, product_purchase_price, product_sale_price,
+                   product_stock, product_supplier_srl, product_manufacture_srl, product_created, product_updated)
     }
   }
 
