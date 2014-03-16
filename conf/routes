@@ -46,6 +46,7 @@ DELETE        /Product/delete/:id                       controllers.Product.dele
 GET           /Product/get/:id                          controllers.Product.get(id:Int)
 GET           /Product/list/:page                       controllers.Product.list(page:Int, count:Int, orderby:String, orderType:String)
 GET           /Product/find/:target/:keyword            controllers.Product.find(target:String, keyword:String, option:String)
+GET           /Product/findAll/:keyword                 controllers.Product.findTotal(keyword:String)
 GET           /Product/lastCode/:id                     controllers.Product.lastCode(id:String)
 
 #Module BILL

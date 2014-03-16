@@ -127,6 +127,20 @@ object Product
       }
   }
 
+  def findByKeyword(keyword:String):List[ProductExtend] = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        val query = SQL("SELECT * FROM product_extend WHERE product_code LIKE {keyword} OR " +
+                                                           "product_name LIKE {keyword} OR " +
+                                                           "supplier_name LIKE {keyword};")
+        query.on("keyword"->keyword).as(ProductExtend.parser *)
+      } catch {
+        case e => null
+      }
+  }
+
   def findLastCode(id:Int):Product = DB.withConnection
   {
     implicit connection =>
