@@ -45,6 +45,25 @@ object Bill {
         => Bill(bill_srl, bill_customer_srl, bill_member_srl, bill_created, bill_updated, bill_info, bill_type, bill_due, bill_isTaxReceipt, bill_amount)
     }
   }
+
+  def create(b:Bill):Bill = DB.withConnection
+  {
+    implicit connection =>
+      SQL("INSERT INTO bill(bill_customer_srl, bill_member_srl, bill_created, bill_updated, " +
+                            "bill_info, bill_type, bill_due, bill_isTaxReceipt, bill_amount) VALUES(" +
+                            "{customer}, {member}, {created}, {updated}, " +
+                            "{info}, {type}, {due}, {tax}, {amount});")
+      .on("customer"->b.bill_customer_srl,
+          "member"->b.bill_member_srl,
+          "created"->b.bill_created,
+          "updated"->b.bill_updated,
+          "info"->b.bill_info,
+          "type"->b.bill_type,
+          "due"->b.bill_due,
+          "tax"->b.bill_isTaxReceipt,
+          "amount"->b.bill_amount)
+      .executeInsert()
+  }
 }
 
 object BillFormatter extends DefaultJsonProtocol

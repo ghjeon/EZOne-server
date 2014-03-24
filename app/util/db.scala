@@ -7,7 +7,7 @@ package util
  * Date: 2014. 2. 7.
  * Time: 오전 11:38
  */
-object structure {
+object db {
 
   def getPageIndex(page:Int, count:Int):Int =
   {
