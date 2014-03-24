@@ -26,6 +26,7 @@ object Product extends Controller {
       val body:Map[String, Seq[String]] = request.body
 
       val product_code = body.getOrElse("code", util.dummy.dummyList)(0)
+      val product_barcode = body.getOrElse("barcode", util.dummy.dummyList)(0)
       val product_name = body.getOrElse("name", util.dummy.dummyList)(0)
       val product_size:String = body.getOrElse("size", util.dummy.dummyList)(0)
       val product_purchase_price = body.getOrElse("purchase_price", util.dummy.dummyListInt)(0).toString.toInt
@@ -38,6 +39,7 @@ object Product extends Controller {
 
       val product = structure.Product(NotAssigned,
         product_code,
+        product_barcode,
         product_name,
         product_size,
         product_purchase_price,
@@ -56,7 +58,43 @@ object Product extends Controller {
         Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
   }
 
-  def modify(id:Int) = TODO
+  def modify(id:Int) =  Action(parse.urlFormEncoded)
+  {
+    request =>
+      val body:Map[String, Seq[String]] = request.body
+
+      val product_srl = body.getOrElse("srl", util.dummy.dummyListInt)(0).toString.toInt
+      val product_code = body.getOrElse("code", util.dummy.dummyList)(0)
+      val product_barcode = body.getOrElse("barcode", util.dummy.dummyList)(0)
+      val product_name = body.getOrElse("name", util.dummy.dummyList)(0)
+      val product_size:String = body.getOrElse("size", util.dummy.dummyList)(0)
+      val product_purchase_price = body.getOrElse("purchase_price", util.dummy.dummyListInt)(0).toString.toInt
+      val product_sale_price = body.getOrElse("sale_price", util.dummy.dummyListInt)(0).toString.toInt
+      val product_stock = body.getOrElse("mobile", util.dummy.dummyListInt)(0).toString.toInt
+      val product_supplier_srl = body.getOrElse("visiting", util.dummy.dummyListInt)(0).toString.toInt
+      val product_manufacture_srl = body.getOrElse("visiting", util.dummy.dummyListInt)(0).toString.toInt
+      val product_updated = timestamp
+
+      val product = structure.Product(new Id(product_srl),
+        product_code,
+        product_barcode,
+        product_name,
+        product_size,
+        product_purchase_price,
+        product_sale_price,
+        product_stock,
+        product_supplier_srl,
+        product_manufacture_srl,
+        0,
+        product_updated)
+
+      val dbResult = structure.Product.create(product)
+
+      if(dbResult != null)
+        Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
+      else
+        Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
+  }
 
   def delete(id:Int) = TODO
 
@@ -100,7 +138,16 @@ object Product extends Controller {
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
       else
         Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
-      Ok("")
+  }
+
+  def findTotal(keyword:String) = Action
+  {
+    request =>
+      val dbResult = structure.Product.findByKeyword("%"+keyword+"%")
+      if(dbResult != null)
+        Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
+      else
+        Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
   }
 
 
