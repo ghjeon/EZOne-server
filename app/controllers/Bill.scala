@@ -30,6 +30,7 @@ object Bill extends Controller {
       val bill_due = body.getOrElse("due", util.dummy.dummyListInt)(0).toString.toInt
       val bill_isTaxReceipt = body.getOrElse("isTaxReceipt", List("N"))(0)
       val bill_amount = body.getOrElse("amount", util.dummy.dummyListInt)(0).toString.toInt
+      val bill_partial_amount = body.getOrElse("partial_amount", util.dummy.dummyListInt)(0).toString.toInt
       val bill_created = timestamp
       val bill_updated = timestamp
 
@@ -43,12 +44,11 @@ object Bill extends Controller {
           bill_type,
           bill_due,
           bill_isTaxReceipt,
-          bill_amount
+          bill_amount,
+          bill_partial_amount
       )
 
       val dbResult = structure.Bill.create(bill)
-
-
 
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
@@ -59,29 +59,32 @@ object Bill extends Controller {
   def modify(id:Int) = Action(parse.urlFormEncoded)
   {
     request =>
-
       val body:Map[String, Seq[String]] = request.body
 
-      val manufacture_name = body.getOrElse("name", util.dummy.dummyList)(0)
-      val manufacture_type = body.getOrElse("type", util.dummy.dummyList)(0)
-      val manufacture_address:String = body.getOrElse("address", util.dummy.dummyList)(0)
-      val manufacture_phone = body.getOrElse("phone", util.dummy.dummyList)(0)
-      val manufacture_charger = body.getOrElse("charger", util.dummy.dummyList)(0)
-      val manufacture_mobile = body.getOrElse("mobile", util.dummy.dummyList)(0)
-      val manufacture_updated = timestamp
+      val bill_customer_srl:Int = body.getOrElse("customer_srl", util.dummy.dummyListInt)(0).toString.toInt
+      val bill_info:String = body.getOrElse("info", util.dummy.dummyList)(0)
+      val bill_type = body.getOrElse("type", util.dummy.dummyList)(0)
+      val bill_due = body.getOrElse("due", util.dummy.dummyListInt)(0).toString.toInt
+      val bill_isTaxReceipt = body.getOrElse("isTaxReceipt", List("N"))(0)
+      val bill_amount = body.getOrElse("amount", util.dummy.dummyListInt)(0).toString.toInt
+      val bill_partial_amount = body.getOrElse("partial_amount", util.dummy.dummyListInt)(0).toString.toInt
+      val bill_updated = timestamp
 
-      val manufacture = structure.Manufacture(
+      val bill = structure.Bill(
         new Id(id),
-        manufacture_name,
-        manufacture_type,
-        manufacture_address,
-        manufacture_phone,
-        manufacture_charger,
-        manufacture_mobile,
+        bill_customer_srl,
         0,
-        manufacture_updated)
+        0,
+        bill_updated,
+        bill_info,
+        bill_type,
+        bill_due,
+        bill_isTaxReceipt,
+        bill_amount,
+        bill_partial_amount
+      )
 
-      val dbResult = structure.Manufacture.update(manufacture)
+      val dbResult = structure.Bill.update(bill)
 
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
@@ -95,7 +98,7 @@ object Bill extends Controller {
   {
     request =>
 
-      val dbResult = structure.Manufacture.findById(new Id(id))
+      val dbResult = structure.Bill.findBy(new Id(id))
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
       else
@@ -103,17 +106,17 @@ object Bill extends Controller {
 
   }
 
-  def list(page:Int, count:Int, orderBy:String, orderType:String) = Action
+  def list(start:Int, end:Int, orderBy:String, orderType:String) = Action
   {
     request =>
-      val dbResult = structure.Manufacture.findAll(page, count, orderBy, orderType)
+      val dbResult = structure.Bill.findByDate(start, end, orderBy, orderType)
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
       else
         Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
   }
 
-  def find(target:String, keyword:String, option:String) = Action
+  def findByCustomerId(keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String) = Action
   {
     request =>
       var keywordEscape:String = "";
@@ -127,7 +130,7 @@ object Bill extends Controller {
       }
       if(optionEscape == "like")
         keywordEscape = "%" + keyword + "%"
-      val dbResult = structure.Manufacture.findByOption("manufacture_" + target, keywordEscape, optionEscape)
+      val dbResult = structure.Bill.findByCustomerId(keyword.toInt, start, end, orderBy, orderType)
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
       else

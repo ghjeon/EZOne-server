@@ -7,7 +7,7 @@ import anorm.SqlParser._
 
 import spray.json._
 
-import util.structure._
+import util.db._
 
 /**
  * Project IntelliJ IDEA
@@ -98,9 +98,9 @@ object Product
     implicit connection =>
       //try
       //{
-        SQL("SELECT * from product_extend order by {orderBy} " + validateOrderType(orderType) + " limit {page}, {count}")
+        SQL("SELECT * from product_extend order by {orderBy} " + util.db.validateOrderType(orderType) + " limit {page}, {count}")
           .on("orderBy"->toParameterValue("product_" + orderBy),
-          "page"->getPageIndex(page, count),
+          "page"->util.db.getPageIndex(page, count),
           "count"->count).as(ProductExtend.parser *)
       //} catch {
       //  case e => null

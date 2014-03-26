@@ -6,6 +6,7 @@ import anorm._
 import anorm.SqlParser._
 
 import spray.json._
+import util.db._
 
 /**
  * Project IntelliJ IDEA

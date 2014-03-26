@@ -7,7 +7,7 @@ import anorm.SqlParser._
 
 import spray.json._
 
-import util.structure._
+import util.db._
 /**
  * Project IntelliJ IDEA
  * Module structure
