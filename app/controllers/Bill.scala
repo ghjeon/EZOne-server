@@ -30,6 +30,7 @@ object Bill extends Controller {
       val bill_due = body.getOrElse("due", util.dummy.dummyListInt)(0).toString.toInt
       val bill_isTaxReceipt = body.getOrElse("isTaxReceipt", List("N"))(0)
       val bill_amount = body.getOrElse("amount", util.dummy.dummyListInt)(0).toString.toInt
+      val bill_actual_amount = body.getOrElse("actual_amount", util.dummy.dummyListInt)(0).toString.toInt
       val bill_partial_amount = body.getOrElse("partial_amount", util.dummy.dummyListInt)(0).toString.toInt
       val bill_created = timestamp
       val bill_updated = timestamp
@@ -45,6 +46,7 @@ object Bill extends Controller {
           bill_due,
           bill_isTaxReceipt,
           bill_amount,
+          bill_actual_amount,
           bill_partial_amount
       )
 
@@ -67,6 +69,7 @@ object Bill extends Controller {
       val bill_due = body.getOrElse("due", util.dummy.dummyListInt)(0).toString.toInt
       val bill_isTaxReceipt = body.getOrElse("isTaxReceipt", List("N"))(0)
       val bill_amount = body.getOrElse("amount", util.dummy.dummyListInt)(0).toString.toInt
+      val bill_actual_amount = body.getOrElse("actual_amount", util.dummy.dummyListInt)(0).toString.toInt
       val bill_partial_amount = body.getOrElse("partial_amount", util.dummy.dummyListInt)(0).toString.toInt
       val bill_updated = timestamp
 
@@ -81,6 +84,7 @@ object Bill extends Controller {
         bill_due,
         bill_isTaxReceipt,
         bill_amount,
+        bill_actual_amount,
         bill_partial_amount
       )
 

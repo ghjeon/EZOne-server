@@ -51,12 +51,13 @@ GET           /Product/lastCode/:id                     controllers.Product.last
 
 #Module BILL
 
-#POST    /Bill/create                controllers.Bill.create()
-#POST    /Bill/modify                controllers.Bill.modify()
-#POST    /Bill/delete                controllers.Bill.delete()
-#POST    /Bill/get                   controllers.Bill.get()
-#POST    /Bill/list                  controllers.Bill.list()
-#POST    /Bill/find                  controllers.Bill.find()
+POST          /Bill/create                              controllers.Bill.create()
+PUT           /Bill/modify/:id                          controllers.Bill.modify(id:Int)
+DELETE        /Bill/delete/:id                          controllers.Bill.delete(id:Int)
+GET           /Bill/get/:id                             controllers.Bill.get(id:Int)
+GET           /Bill/list                                controllers.Bill.list(start:Int, end:Int, orderBy:String, orderType:String)
+GET           /Bill/find/customer                       controllers.Bill.findByCustomerId(keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String)
+
 
 #Module RECEIPT
 
