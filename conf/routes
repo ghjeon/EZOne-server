@@ -36,7 +36,7 @@ PUT           /Manufacture/modify/:id                   controllers.Manufacture.
 DELETE        /Manufacture/delete/:id                   controllers.Manufacture.delete(id:Int)
 GET           /Manufacture/get/:id                      controllers.Manufacture.get(id:Int)
 GET           /Manufacture/list/:page                   controllers.Manufacture.list(page:Int, count:Int, orderby:String, orderType:String)
-GET           /Manufacture/find/:target/:keyword        controllers.Manufacture.find(target:String, keyword:String, option:String)
+GET           /Manufacture/find/:target                 controllers.Manufacture.find(target:String, keyword:String, option:String)
 
 #Module PRODUCT
 
