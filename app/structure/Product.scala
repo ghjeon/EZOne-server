@@ -175,7 +175,7 @@ object Product
   {
     implicit connection =>
       val insertRow = SQL("INSERT INTO product(product_code, product_barcode, product_name, product_size, product_purchase_price, product_sale_price, product_stock, product_supplier_srl, product_manufacture_srl, product_created, product_updated) " +
-        "values ({code}, {barcode}, {name], {size}, {purchase_price}, {sale_price}, {stock}, {supplier_srl}, {manufacture_srl}, {created}, {updated}); ")
+        "values ({code}, {barcode}, {name}, {size}, {purchase_price}, {sale_price}, {stock}, {supplier_srl}, {manufacture_srl}, {created}, {updated}); ")
         .on("code"->p.product_code,
             "barcode"->p.product_barcode,
             "name"->p.product_name,
