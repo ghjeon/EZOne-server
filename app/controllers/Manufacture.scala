@@ -132,6 +132,5 @@ object Manufacture extends Controller {
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
       else
         Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
-      Ok("")
   }
 }
