@@ -114,7 +114,7 @@ object Manufacture extends Controller {
   def find(target:String, keyword:String, option:String) = Action
   {
     request =>
-      var keywordEscape:String = "";
+      var keywordEscape:String = ""
       val optionEscape:String = option match
       {
         case "=" => "="
@@ -125,6 +125,8 @@ object Manufacture extends Controller {
       }
       if(optionEscape == "like")
         keywordEscape = "%" + keyword + "%"
+      else
+        keywordEscape = keyword
       val dbResult = structure.Manufacture.findByOption("manufacture_" + target, keywordEscape, optionEscape)
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))

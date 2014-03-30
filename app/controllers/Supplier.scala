@@ -106,7 +106,7 @@ object Supplier extends Controller {
   def find(target:String, keyword:String, option:String) = Action
   {
     request =>
-      var keywordEscape:String = "";
+      var keywordEscape:String = ""
       val optionEscape:String = option match
       {
         case "=" => "="
@@ -117,6 +117,7 @@ object Supplier extends Controller {
       }
       if(optionEscape == "like")
         keywordEscape = "%" + keyword + "%"
+      else keywordEscape = keyword
       val dbResult = structure.Supplier.findByOption("supplier_" + target, keywordEscape, optionEscape)
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))

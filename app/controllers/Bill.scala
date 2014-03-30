@@ -134,6 +134,8 @@ object Bill extends Controller {
       }
       if(optionEscape == "like")
         keywordEscape = "%" + keyword + "%"
+      else
+        keywordEscape = keyword
       val dbResult = structure.Bill.findByCustomerId(keyword.toInt, start, end, orderBy, orderType)
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
