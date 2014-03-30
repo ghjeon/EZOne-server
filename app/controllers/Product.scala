@@ -88,7 +88,7 @@ object Product extends Controller {
         0,
         product_updated)
 
-      val dbResult = structure.Product.create(product)
+      val dbResult = structure.Product.update(product)
 
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
