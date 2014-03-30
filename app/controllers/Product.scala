@@ -31,9 +31,9 @@ object Product extends Controller {
       val product_size:String = body.getOrElse("size", util.dummy.dummyList)(0)
       val product_purchase_price = body.getOrElse("purchase_price", util.dummy.dummyListInt)(0).toString.toInt
       val product_sale_price = body.getOrElse("sale_price", util.dummy.dummyListInt)(0).toString.toInt
-      val product_stock = body.getOrElse("mobile", util.dummy.dummyListInt)(0).toString.toInt
-      val product_supplier_srl = body.getOrElse("visiting", util.dummy.dummyListInt)(0).toString.toInt
-      val product_manufacture_srl = body.getOrElse("visiting", util.dummy.dummyListInt)(0).toString.toInt
+      val product_stock = body.getOrElse("stock", util.dummy.dummyListInt)(0).toString.toInt
+      val product_supplier_srl = body.getOrElse("supplier_srl", util.dummy.dummyListInt)(0).toString.toInt
+      val product_manufacture_srl = body.getOrElse("manufacture_srlㄹ", util.dummy.dummyListInt)(0).toString.toInt
       val product_created = timestamp
       val product_updated = timestamp
 
