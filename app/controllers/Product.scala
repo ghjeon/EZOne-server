@@ -63,7 +63,7 @@ object Product extends Controller {
     request =>
       val body:Map[String, Seq[String]] = request.body
 
-      val product_srl = body.getOrElse("srl", util.dummy.dummyListInt)(0).toString.toInt
+      val product_srl = id
       val product_code = body.getOrElse("code", util.dummy.dummyList)(0)
       val product_barcode = body.getOrElse("barcode", util.dummy.dummyList)(0)
       val product_name = body.getOrElse("name", util.dummy.dummyList)(0)
