@@ -151,7 +151,7 @@ object Product
     implicit connection =>
       try
       {
-        SQL("SELECT * from product where product_supplier_srl = {srl} order by product_created desc limit 1")
+        SQL("SELECT * from product where product_supplier_srl = {srl} order by product_code desc limit 1")
           .on("srl"->id)
           .using(this.parser).single()
       } catch {
