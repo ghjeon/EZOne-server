@@ -159,6 +159,21 @@ object Product
       }
   }
 
+  def findDuplicate(name:String, size:String, supplier_srl:Int):Product = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        SQL("SELECT * FROM product WHERE product_name = {name} AND product_size = {size} AND product_supplier_srl = {supplier} LIMIT 1")
+          .on("name"->name,
+              "size"->size,
+              "supplier"->supplier_srl)
+          .using(this.parser).single()
+      } catch {
+        case e=> null
+      }
+  }
+
   def findById(id:Pk[Int]):ProductExtend = DB.withConnection
   {
     implicit connection =>

@@ -50,12 +50,19 @@ object Product extends Controller {
         product_created,
         product_updated)
 
-      val dbResult = structure.Product.create(product)
+      if(structure.Product.findDuplicate(product_name, product_size, product_supplier_srl) == null)
+      {
 
-      if(dbResult != null)
-        Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
-      else
-        Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
+        val dbResult = structure.Product.create(product)
+
+        if(dbResult != null)
+          Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
+        else
+          Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
+      } else
+      {
+        Ok(Json.obj("result"->"Fail", "code"->"4601", "message"->"PRODUCT_DUPLICATED"))
+      }
   }
 
   def modify(id:Int) =  Action(parse.urlFormEncoded)
