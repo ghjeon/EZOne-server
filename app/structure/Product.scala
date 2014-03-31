@@ -234,6 +234,24 @@ object Product
 
       findById(p.product_srl)
   }
+
+  def delete(id:Pk[Int]):ProductExtend = DB.withConnection
+  {
+    implicit connection =>
+      try
+      {
+        val row = findById(id)
+        val deleteRow = SQL("DELETE FROM product " +
+                            "WHERE product_srl = {srl};")
+        .on("srl"->id.get).execute()
+        row
+      } catch
+      {
+        case e=> null
+      }
+
+  }
+
 }
 
 object ProductFormatter extends DefaultJsonProtocol
