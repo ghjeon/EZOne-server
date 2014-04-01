@@ -135,6 +135,18 @@ object Manufacture
       findById(m.manufacture_srl)
   }
 
+  def delete(id:Pk[Int]):Manufacture = DB.withConnection
+  {
+    implicit connection =>
+      val row = findById(id)
+      SQL("DELETE FROM manufacture " +
+          "WHERE manufacture_srl = {srl};")
+      .on("srl"->id.get)
+      .execute()
+
+      row
+  }
+
 
 }
 
