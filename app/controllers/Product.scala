@@ -167,6 +167,16 @@ object Product extends Controller {
         Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
   }
 
+  def findTotalBySupplierId(id:Int, keyword:String) = Action
+  {
+    request =>
+      val dbResult = structure.Product.findByKeyword(id, "%"+keyword+"%")
+      if(dbResult != null)
+        Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
+      else
+        Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
+  }
+
 
   def lastCode(id:String) = Action
   {
