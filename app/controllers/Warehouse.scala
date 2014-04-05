@@ -117,7 +117,7 @@ object Warehouse extends Controller {
         Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
   }
 
-  def find(target:String, keyword:String, option:String) = Action
+  def find(target:String, keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String) = Action
   {
     request =>
       var keywordEscape:String = ""
