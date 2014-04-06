@@ -25,6 +25,7 @@ object Supplier extends Controller {
       val supplier_charger = body.getOrElse("charger", util.dummy.dummyList)(0)
       val supplier_mobile = body.getOrElse("mobile", util.dummy.dummyList)(0)
       val supplier_visiting = body.getOrElse("visiting", util.dummy.dummyList)(0)
+      val supplier_protage = body.getOrElse("protage", util.dummy.dummyListInt)(0).toString.toInt
       val supplier_created = timestamp
       val supplier_updated = timestamp
 
@@ -36,6 +37,7 @@ object Supplier extends Controller {
                                        supplier_charger,
                                        supplier_mobile,
                                        supplier_visiting,
+                                       supplier_protage,
                                        supplier_created,
                                        supplier_updated)
 
@@ -59,6 +61,7 @@ object Supplier extends Controller {
       val supplier_charger = body.getOrElse("charger", util.dummy.dummyList)(0)
       val supplier_mobile = body.getOrElse("mobile", util.dummy.dummyList)(0)
       val supplier_visiting = body.getOrElse("visiting", util.dummy.dummyList)(0)
+      val supplier_protage = body.getOrElse("protage", util.dummy.dummyListInt)(0).toString.toInt
       val supplier_updated = timestamp
 
       val supplier = structure.Supplier(new Id(id),
@@ -69,6 +72,7 @@ object Supplier extends Controller {
         supplier_charger,
         supplier_mobile,
         supplier_visiting,
+        supplier_protage,
         0,
         supplier_updated)
 
