@@ -130,7 +130,7 @@ object Supplier
                           "supplier_charger = {charger}, " +
                           "supplier_mobile = {mobile}, " +
                           "supplier_visiting = {visiting}, " +
-                          "supploer_protage = {protage}, " +
+                          "supplier_protage = {protage}, " +
                           "supplier_updated = {updated} " +
                           "where supplier_srl = {id};")
       .on("name"->s.supplier_name,
