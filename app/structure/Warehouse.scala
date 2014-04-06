@@ -142,6 +142,14 @@ object Warehouse
       val insertRow = SQL("INSERT INTO warehouse(warehouse_supplier_srl, warehouse_due_date, warehouse_amount, warehouse_bill, " +
                                 "warehouse_stored, warehouse_products, warehouse_created, warehouse_updated) " +
           "VALUES({supplier}, {date}, {amount}, {bill}, {stored}, {products}, {created}, {updated});")
+        .on("supplier"->w.warehouse_supplier_srl,
+            "date"->w.warehouse_due_date,
+            "amount"->w.warehouse_amount,
+            "bill"->w.warehouse_bill,
+            "stored"->w.warehouse_stored,
+            "products"->w.warehouse_products,
+            "created"->w.warehouse_created,
+            "updated"->w.warehouse_updated)
         .executeInsert(scalar[Long].single).toInt
 
       findById(new Id(insertRow))
