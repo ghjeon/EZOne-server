@@ -166,7 +166,8 @@ object Warehouse
                             "warehouse_products = {products}, " +
                             "warehouse_updated = {updated}" +
                           "WHERE warehouse_srl = {srl};")
-        .on("date"->w.warehouse_due_date,
+        .on("srl"->w.warehouse_srl,
+            "date"->w.warehouse_due_date,
             "amount"->w.warehouse_amount,
             "bill"->w.warehouse_bill,
             "stored"->w.warehouse_stored,
