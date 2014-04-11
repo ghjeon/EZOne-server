@@ -164,7 +164,7 @@ object Warehouse
                             "warehouse_bill = {bill}, " +
                             "warehouse_stored = {stored}, " +
                             "warehouse_products = {products}, " +
-                            "warehouse_updated = {updated}" +
+                            "warehouse_updated = {updated} " +
                           "WHERE warehouse_srl = {srl};")
         .on("srl"->w.warehouse_srl,
             "date"->w.warehouse_due_date,
