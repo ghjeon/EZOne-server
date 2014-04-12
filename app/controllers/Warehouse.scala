@@ -52,10 +52,10 @@ object Warehouse extends Controller {
         Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
   }
 
-  def modify(id:Int) =  Action(parse.maxLength(102400000, parse.urlFormEncoded))
+  def modify(id:Int) =  Action(parse.urlFormEncoded(maxLength = 1024 * 1000000))
   {
     request =>
-      val body:Map[String, Seq[String]] = request.body.right.getOrElse(Map[String, Seq[String]]())
+      val body:Map[String, Seq[String]] = request.body
 
       val warehouse_srl = id
       val warehouse_supplier_srl = body.getOrElse("supplier", util.dummy.dummyListInt)(0).toString.toInt
