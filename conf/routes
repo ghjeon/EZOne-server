@@ -3,10 +3,10 @@
 # ~~~~
 
 # Home page
-GET           /                                      controllers.Application.index
+GET           /                                          controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file                          controllers.Assets.at(path="/public", file)
+GET           /assets/*file                              controllers.Assets.at(path="/public", file)
 
 
 # Module MEMBER
@@ -22,42 +22,42 @@ GET           /assets/*file                          controllers.Assets.at(path=
 
 # Module supplier
 
-POST          /Supplier/create                       controllers.Supplier.create()
-PUT           /Supplier/modify/:id                   controllers.Supplier.modify(id:Int)
-DELETE        /Supplier/delete/:id                   controllers.Supplier.delete(id:Int)
-GET           /Supplier/get/:id                      controllers.Supplier.get(id:Int)
-GET           /Supplier/list/:page                   controllers.Supplier.list(page:Int, count:Int, orderby:String, orderType:String)
-GET           /Supplier/find/:target/:keyword        controllers.Supplier.find(target:String, keyword:String, option:String)
+POST          /Supplier/create                           controllers.Supplier.create()
+PUT           /Supplier/modify/:id                       controllers.Supplier.modify(id:Int)
+DELETE        /Supplier/delete/:id                       controllers.Supplier.delete(id:Int)
+GET           /Supplier/get/:id                          controllers.Supplier.get(id:Int)
+GET           /Supplier/list/:page                       controllers.Supplier.list(page:Int, count:Int, orderby:String, orderType:String)
+GET           /Supplier/find/:target/:keyword            controllers.Supplier.find(target:String, keyword:String, option:String)
 
 #Module manufacture
 
-POST          /Manufacture/create                    controllers.Manufacture.create()
-PUT           /Manufacture/modify/:id                controllers.Manufacture.modify(id:Int)
-DELETE        /Manufacture/delete/:id                controllers.Manufacture.delete(id:Int)
-GET           /Manufacture/get/:id                   controllers.Manufacture.get(id:Int)
-GET           /Manufacture/list/:page                controllers.Manufacture.list(page:Int, count:Int, orderby:String, orderType:String)
-GET           /Manufacture/find/:target              controllers.Manufacture.find(target:String, keyword:String, option:String)
+POST          /Manufacture/create                        controllers.Manufacture.create()
+PUT           /Manufacture/modify/:id                    controllers.Manufacture.modify(id:Int)
+DELETE        /Manufacture/delete/:id                    controllers.Manufacture.delete(id:Int)
+GET           /Manufacture/get/:id                       controllers.Manufacture.get(id:Int)
+GET           /Manufacture/list/:page                    controllers.Manufacture.list(page:Int, count:Int, orderby:String, orderType:String)
+GET           /Manufacture/find/:target                  controllers.Manufacture.find(target:String, keyword:String, option:String)
 
 #Module PRODUCT
 
-POST          /Product/create                        controllers.Product.create()
-PUT           /Product/modify/:id                    controllers.Product.modify(id:Int)
-DELETE        /Product/delete/:id                    controllers.Product.delete(id:Int)
-GET           /Product/get/:id                       controllers.Product.get(id:Int)
-GET           /Product/list/:page                    controllers.Product.list(page:Int, count:Int, orderby:String, orderType:String)
-GET           /Product/find/:target/:keyword         controllers.Product.find(target:String, keyword:String, option:String)
-GET           /Product/findAll/:keyword              controllers.Product.findTotal(keyword:String)
-GET           /Product/findAll/:supplier/:keyword    controllers.Product.findTotalBySupplierId(supplier:Int, keyword:String)
-GET           /Product/lastCode/:id                  controllers.Product.lastCode(id:String)
+POST          /Product/create                            controllers.Product.create()
+PUT           /Product/modify/:id                        controllers.Product.modify(id:Int)
+DELETE        /Product/delete/:id                        controllers.Product.delete(id:Int)
+GET           /Product/get/:id                           controllers.Product.get(id:Int)
+GET           /Product/list/:page                        controllers.Product.list(page:Int, count:Int, orderby:String, orderType:String)
+GET           /Product/find/:target/:keyword             controllers.Product.find(target:String, keyword:String, option:String)
+GET           /Product/findAll/:keyword                  controllers.Product.findTotal(keyword:String)
+GET           /Product/findAll/:supplier/:keyword        controllers.Product.findTotalBySupplierId(supplier:Int, keyword:String)
+GET           /Product/lastCode/:id                      controllers.Product.lastCode(id:String)
 
 #Module BILL
 
-POST          /Bill/create                           controllers.Bill.create()
-PUT           /Bill/modify/:id                       controllers.Bill.modify(id:Int)
-DELETE        /Bill/delete/:id                       controllers.Bill.delete(id:Int)
-GET           /Bill/get/:id                          controllers.Bill.get(id:Int)
-GET           /Bill/list                             controllers.Bill.list(start:Int, end:Int, orderBy:String, orderType:String)
-GET           /Bill/find/customer                    controllers.Bill.findByCustomerId(keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String)
+POST          /Bill/create                               controllers.Bill.create()
+PUT           /Bill/modify/:id                           controllers.Bill.modify(id:Int)
+DELETE        /Bill/delete/:id                           controllers.Bill.delete(id:Int)
+GET           /Bill/get/:id                              controllers.Bill.get(id:Int)
+GET           /Bill/list                                 controllers.Bill.list(start:Int, end:Int, orderBy:String, orderType:String)
+GET           /Bill/find/customer                        controllers.Bill.findByCustomerId(keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String)
 
 
 #Module RECEIPT
@@ -80,9 +80,10 @@ GET           /Bill/find/customer                    controllers.Bill.findByCust
 
 #Module WAREHOUSE
 
-POST    /Warehouse/create                            controllers.Warehouse.create()
-PUT     /Warehouse/modify/:id                        controllers.Warehouse.modify(id:Int)
-DELETE  /Warehouse/delete/:id                        controllers.Warehouse.delete(id:Int)
-GET     /Warehouse/get/:id                           controllers.Warehouse.get(id:Int)
-GET     /Warehouse/list                              controllers.Warehouse.list(start:Int, end:Int, orderBy:String, orderType:String)
-GET     /Warehouse/find/:target                      controllers.Warehouse.find(target:String, keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String)
+POST          /Warehouse/create                          controllers.Warehouse.create()
+PUT           /Warehouse/modify/:id                      controllers.Warehouse.modify(id:Int)
+DELETE        /Warehouse/delete/:id                      controllers.Warehouse.delete(id:Int)
+GET           /Warehouse/get/:id                         controllers.Warehouse.get(id:Int)
+GET           /Warehouse/list                            controllers.Warehouse.list(start:Int, end:Int, orderBy:String, orderType:String)
+GET           /Warehouse/find/supplier                   controllers.Warehouse.findBySupplier(supplier_srl:Int, start:Int, end:Int, orderBy:String, orderType:String)
+GET           /Warehouse/find/:target                    controllers.Warehouse.find(target:String, keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String)
