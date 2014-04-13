@@ -85,5 +85,5 @@ PUT           /Warehouse/modify/:id                      controllers.Warehouse.m
 DELETE        /Warehouse/delete/:id                      controllers.Warehouse.delete(id:Int)
 GET           /Warehouse/get/:id                         controllers.Warehouse.get(id:Int)
 GET           /Warehouse/list                            controllers.Warehouse.list(start:Int, end:Int, orderBy:String, orderType:String)
-GET           /Warehouse/find/supplier                   controllers.Warehouse.findBySupplier(supplier_srl:Int, start:Int, end:Int, orderBy:String, orderType:String)
+GET           /Warehouse/find/supplier                   controllers.Warehouse.findBySupplier(supplier:Int, start:Int, end:Int, orderBy:String, orderType:String)
 GET           /Warehouse/find/:target                    controllers.Warehouse.find(target:String, keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String)
