@@ -25,6 +25,38 @@ case class Warehouse (warehouse_srl:Pk[Int],
                   warehouse_created:Int,
                   warehouse_updated:Int)
 
+case class WarehouseExtend (warehouse_srl:Pk[Int],
+                      warehouse_supplier_srl:Int,
+                      supplier_name:String,
+                      warehouse_due_date:Int,
+                      warehouse_amount:Int,
+                      warehouse_bill:String,
+                      warehouse_stored:String,
+                      warehouse_products:String,
+                      warehouse_created:Int,
+                      warehouse_updated:Int)
+
+object WarehouseExtend
+{
+  val parser =
+  {
+    get[Pk[Int]]("warehouse_srl") ~
+      get[Int]("warehouse_supplier_srl") ~
+      get[String]("supplier_name") ~
+      get[Int]("warehouse_due_date") ~
+      get[Int]("warehouse_amount") ~
+      get[String]("warehouse_bill") ~
+      get[String]("warehouse_stored") ~
+      get[String]("warehouse_products") ~
+      get[Int]("warehouse_created") ~
+      get[Int]("warehouse_updated") map
+      {
+        case warehouse_srl ~ warehouse_supplier_srl ~ supplier_name ~ warehouse_date ~ warehouse_amount ~ warehouse_bill ~ warehouse_stored ~ warehouse_products ~ warehouse_created ~ warehouse_updated
+        => WarehouseExtend(warehouse_srl, warehouse_supplier_srl, supplier_name, warehouse_date, warehouse_amount, warehouse_bill, warehouse_stored, warehouse_products, warehouse_created, warehouse_updated)
+      }
+  }
+}
+
 object Warehouse
 {
   val parser =
@@ -58,12 +90,12 @@ object Warehouse
       }
   }
 
-  def findBySupplier(supplier_srl:Int, start:Int, end:Int, orderBy:String, orderType:String):List[Warehouse] = DB.withConnection
+  def findBySupplier(supplier_srl:Int, start:Int, end:Int, orderBy:String, orderType:String):List[WarehouseExtend] = DB.withConnection
   {
     implicit connection =>
       try
       {
-        SQL("SELECT * FROM warehouse " +
+        SQL("SELECT * FROM warehouse_extend " +
           "WHERE warehouse_supplier_srl = {srl} AND " +
                 "warehouse_updated >= {start} AND " +
                 "warehouse_updated <= {end} " +
@@ -72,32 +104,32 @@ object Warehouse
             "start"->start,
             "end"->end,
             "orderBy"->orderBy)
-        .as(this.parser *)
+        .as(WarehouseExtend.parser *)
       } catch
       {
         case e => null
       }
   }
 
-  def findByDate(start:Int, end:Int, orderBy:String, orderType:String):List[Warehouse] = DB.withConnection
+  def findByDate(start:Int, end:Int, orderBy:String, orderType:String):List[WarehouseExtend] = DB.withConnection
   {
     implicit connection =>
       try
       {
-        SQL("SELECT * FROM warehouse " +
+        SQL("SELECT * FROM warehouse_extend " +
           "WHERE warehouse_updated >= {start} AND " +
                 "warehouse_updated <= {end} " +
                 "ORDER BY {orderBy} " + util.db.validateOrderType(orderType) + ";")
         .on("start"->start,
             "end"->end,
             "orderBy"->orderBy)
-        .as(this.parser *)
+        .as(WarehouseExtend.parser *)
       } catch {
         case e=> null
       }
   }
 
-  def findByProduct(keyword:String, start:Int, end:Int):List[Warehouse] = DB.withConnection
+  def findByProduct(keyword:String, start:Int, end:Int):List[WarehouseExtend] = DB.withConnection
   {
     implicit connection =>
       try
@@ -106,13 +138,13 @@ object Warehouse
           "WHERE warehouse_products like {keyword} AND " +
                 "warehouse_updated >= {start} AND " +
                 "warehouse_updated <= {end};")
-        query.on("keyword"->keyword).as(this.parser *)
+        query.on("keyword"->keyword).as(WarehouseExtend.parser *)
       } catch {
         case e => null
       }
   }
 
-  def findByOption(target:String, keyword:String, option:String):List[Warehouse] = DB.withConnection
+  def findByOption(target:String, keyword:String, option:String):List[WarehouseExtend] = DB.withConnection
   {
     implicit connection =>
       try
@@ -126,9 +158,9 @@ object Warehouse
 
         val query = SQL("SELECT * FROM warehouse WHERE " + target + " " + option + " {keyword}")
         if(keywordType == "String")
-          query.on("keyword"->keyword).as(this.parser *)
+          query.on("keyword"->keyword).as(WarehouseExtend.parser *)
         else if(keywordType == "Int")
-          query.on("keyword"->keyword.toInt).as(this.parser *)
+          query.on("keyword"->keyword.toInt).as(WarehouseExtend.parser *)
         else
           null
       } catch {
@@ -212,6 +244,30 @@ object WarehouseFormatter extends DefaultJsonProtocol
       v.asJsObject.getFields("warehouse_srl", "warehouse_supplier_srl", "warehouse_date", "warehouse_amount", "warehouse_bill", "warehouse_stored", "warehouse_products", "warehouse_created", "warehouse_updated") match {
         case Seq(JsNumber(warehouse_srl), JsNumber(warehouse_supplier_srl), JsNumber(warehouse_date), JsNumber(warehouse_amount), JsString(warehouse_bill), JsString(warehouse_stored), JsString(warehouse_products), JsNumber(warehouse_created), JsNumber(warehouse_updated))
         => new Warehouse(new Id(warehouse_srl.toInt), warehouse_supplier_srl.toInt, warehouse_date.toInt, warehouse_amount.toInt, warehouse_bill, warehouse_stored, warehouse_products, warehouse_created.toInt, warehouse_updated.toInt)
+      }
+    }
+  }
+
+  implicit object warehouseExtendFormat extends RootJsonFormat[WarehouseExtend]
+  {
+    def write(o:WarehouseExtend) = JsObject(
+      "warehouse_srl" -> JsNumber(o.warehouse_srl.get),
+      "warehouse_supplier_srl" -> JsNumber(o.warehouse_supplier_srl),
+      "supplier_name" -> JsString(o.supplier_name),
+      "warehouse_due_date" -> JsNumber(o.warehouse_due_date),
+      "warehouse_amount" -> JsNumber(o.warehouse_amount),
+      "warehouse_bill" -> JsString(o.warehouse_bill),
+      "warehouse_stored" -> JsString(o.warehouse_stored),
+      "warehouse_products" -> JsString(o.warehouse_products),
+      "warehouse_created" -> JsNumber(o.warehouse_created),
+      "warehouse_updated" -> JsNumber(o.warehouse_updated)
+    )
+
+    def read(v:JsValue) =
+    {
+      v.asJsObject.getFields("warehouse_srl", "warehouse_supplier_srl", "supplier_name", "warehouse_date", "warehouse_amount", "warehouse_bill", "warehouse_stored", "warehouse_products", "warehouse_created", "warehouse_updated") match {
+        case Seq(JsNumber(warehouse_srl), JsNumber(warehouse_supplier_srl), JsString(supplier_name), JsNumber(warehouse_date), JsNumber(warehouse_amount), JsString(warehouse_bill), JsString(warehouse_stored), JsString(warehouse_products), JsNumber(warehouse_created), JsNumber(warehouse_updated))
+        => new WarehouseExtend(new Id(warehouse_srl.toInt), warehouse_supplier_srl.toInt, supplier_name, warehouse_date.toInt, warehouse_amount.toInt, warehouse_bill, warehouse_stored, warehouse_products, warehouse_created.toInt, warehouse_updated.toInt)
       }
     }
   }
