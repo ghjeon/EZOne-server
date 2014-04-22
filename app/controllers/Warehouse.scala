@@ -64,10 +64,11 @@ object Warehouse extends Controller {
         Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
   }
 
-  def modify(id:Int) =  Action(parse.urlFormEncoded(maxLength = 1024 * 1000000000))
+  def modify(id:Int) =  Action(parse.multipartFormData)
   {
     request =>
-      val body:Map[String, Seq[String]] = request.body
+
+      val body = request.body.dataParts
 
       val warehouse_srl = id
       val warehouse_supplier_srl = body.getOrElse("supplier", util.dummy.dummyListInt)(0).toString.toInt
@@ -75,7 +76,13 @@ object Warehouse extends Controller {
       val warehouse_amount = body.getOrElse("amount", util.dummy.dummyListInt)(0).toString.toInt
       val warehouse_bill = body.getOrElse("bill", util.dummy.dummyList)(0)
       val warehouse_stored = body.getOrElse("stored", util.dummy.dummyList)(0)
-      val warehouse_products = body.getOrElse("products", util.dummy.dummyList)(0)
+      val warehouse_products = request.body.file("products") map {
+        data =>
+          val src = scala.io.Source.fromFile(data.ref.file, "UTF-8")
+          val str = src.mkString
+          src.close()
+          str
+      }
       val warehouse_created = timestamp
       val warehouse_updated = timestamp
 
@@ -85,7 +92,7 @@ object Warehouse extends Controller {
         warehouse_amount,
         warehouse_bill,
         warehouse_stored,
-        warehouse_products,
+        warehouse_products.get,
         warehouse_created,
         warehouse_updated)
 
