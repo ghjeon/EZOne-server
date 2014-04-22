@@ -10,6 +10,8 @@ import spray.json._
 
 import structure.WarehouseFormatter._
 import util.time._
+import java.io.FileInputStream
+import java.nio.channels.FileChannel
 
 /**
  * Project IntelliJ IDEA
@@ -20,11 +22,11 @@ import util.time._
  */
 object Warehouse extends Controller {
 
-  def create() = Action
+  def create() = Action(parse.multipartFormData)
   {
     request =>
 
-      val body:Map[String, Seq[String]] = request.body.asFormUrlEncoded.get
+      val body = request.body.dataParts
 
       val warehouse_supplier_srl = body.getOrElse("supplier", util.dummy.dummyListInt)(0).toString.toInt
       val warehouse_due_date = body.getOrElse("due_date", util.dummy.dummyListInt)(0).toString.toInt
@@ -33,7 +35,14 @@ object Warehouse extends Controller {
       val warehouse_stored = body.getOrElse("stored", util.dummy.dummyList)(0)
 
       //val warehouse_products = body.getOrElse("products", util.dummy.dummyList)(0)
-      val warehouse_products = request.headers.get("products").toString
+      //val warehouse_products = request.headers.get("products").toString
+      val warehouse_products = request.body.file("products") map {
+        data =>
+         val src = scala.io.Source.fromFile(data.ref.file, "UTF-8")
+         val str = src.mkString
+         src.close()
+         str
+      }
       val warehouse_created = timestamp
       val warehouse_updated = timestamp
 
@@ -43,7 +52,7 @@ object Warehouse extends Controller {
           warehouse_amount,
           warehouse_bill,
           warehouse_stored,
-          warehouse_products,
+          warehouse_products.get,
           warehouse_created,
           warehouse_updated)
 
