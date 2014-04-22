@@ -20,10 +20,11 @@ import util.time._
  */
 object Warehouse extends Controller {
 
-  def create() = Action(parse.urlFormEncoded(maxLength = 1024 * 1000000000))
+  def create() = Action
   {
     request =>
-      val body:Map[String, Seq[String]] = request.body
+
+      val body:Map[String, Seq[String]] = request.body.asFormUrlEncoded.get
 
       val warehouse_supplier_srl = body.getOrElse("supplier", util.dummy.dummyListInt)(0).toString.toInt
       val warehouse_due_date = body.getOrElse("due_date", util.dummy.dummyListInt)(0).toString.toInt
@@ -31,7 +32,8 @@ object Warehouse extends Controller {
       val warehouse_bill = body.getOrElse("bill", util.dummy.dummyList)(0)
       val warehouse_stored = body.getOrElse("stored", util.dummy.dummyList)(0)
 
-      val warehouse_products = body.getOrElse("products", util.dummy.dummyList)(0)
+      //val warehouse_products = body.getOrElse("products", util.dummy.dummyList)(0)
+      val warehouse_products = request.headers.get("products").toString
       val warehouse_created = timestamp
       val warehouse_updated = timestamp
 
