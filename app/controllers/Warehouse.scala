@@ -30,6 +30,7 @@ object Warehouse extends Controller {
       val warehouse_amount = body.getOrElse("amount", util.dummy.dummyListInt)(0).toString.toInt
       val warehouse_bill = body.getOrElse("bill", util.dummy.dummyList)(0)
       val warehouse_stored = body.getOrElse("stored", util.dummy.dummyList)(0)
+
       val warehouse_products = body.getOrElse("products", util.dummy.dummyList)(0)
       val warehouse_created = timestamp
       val warehouse_updated = timestamp
