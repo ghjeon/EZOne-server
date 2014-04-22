@@ -20,7 +20,7 @@ import util.time._
  */
 object Warehouse extends Controller {
 
-  def create() = Action(parse.urlFormEncoded)
+  def create() = Action(parse.urlFormEncoded(maxLength = 1024 * 1000000000))
   {
     request =>
       val body:Map[String, Seq[String]] = request.body
@@ -52,7 +52,7 @@ object Warehouse extends Controller {
         Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
   }
 
-  def modify(id:Int) =  Action(parse.urlFormEncoded(maxLength = 1024 * 1000000))
+  def modify(id:Int) =  Action(parse.urlFormEncoded(maxLength = 1024 * 1000000000))
   {
     request =>
       val body:Map[String, Seq[String]] = request.body
