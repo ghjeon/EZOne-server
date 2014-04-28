@@ -119,7 +119,10 @@ object Product
           case _ => "String"
         }
 
-        val query = SQL("SELECT * from product_extend where " + target + " " + option + " {keyword}")
+        val query = SQL("SELECT * from product_extend where " + target + " " + option + " {keyword} " +
+          "ORDER BY product_name ASC, " +
+          "product_size ASC, " +
+          "product_supplier_srl ASC;")
         if(keywordType == "String")
           query.on("keyword"->keyword).as(ProductExtend.parser *)
         else if(keywordType == "Int")
@@ -139,7 +142,10 @@ object Product
         val query = SQL("SELECT * FROM product_extend WHERE product_code LIKE {keyword} OR " +
                                                            "product_barcode LIKE {keyword} OR " +
                                                            "product_name LIKE {keyword} OR " +
-                                                           "supplier_name LIKE {keyword};")
+                                                           "supplier_name LIKE {keyword} " +
+                                                           "ORDER BY product_name ASC, " +
+                                                                    "product_size ASC, " +
+                                                                    "product_supplier_srl ASC;")
         query.on("keyword"->keyword).as(ProductExtend.parser *)
       } catch {
         case e => null
@@ -155,7 +161,10 @@ object Product
           "product_barcode LIKE {keyword} OR " +
           "product_name LIKE {keyword} OR " +
           "supplier_name LIKE {keyword}) AND " +
-          "product_supplier_name = {srl};")
+          "product_supplier_name = {srl} + " +
+          "ORDER BY product_name ASC, " +
+          "product_size ASC, " +
+          "product_supplier_srl ASC;")
         query.on("keyword"->keyword,
                  "srl"->id)
              .as(ProductExtend.parser *)
