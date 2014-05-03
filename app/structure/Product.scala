@@ -144,7 +144,7 @@ object Product
                                                            "product_name LIKE {keyword} OR " +
                                                            "supplier_name LIKE {keyword} " +
                                                            "ORDER BY product_name ASC, " +
-                                                                    "product_size ASC, " +
+                                                                    "CAST(product_size as signed) ASC, " +
                                                                     "product_supplier_srl ASC;")
         query.on("keyword"->keyword).as(ProductExtend.parser *)
       } catch {
@@ -163,7 +163,7 @@ object Product
           "supplier_name LIKE {keyword}) AND " +
           "product_supplier_name = {srl} + " +
           "ORDER BY product_name ASC, " +
-          "product_size ASC, " +
+          "CAST(product_size as signed) ASC, " +
           "product_supplier_srl ASC;")
         query.on("keyword"->keyword,
                  "srl"->id)
