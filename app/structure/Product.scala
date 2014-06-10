@@ -178,7 +178,7 @@ object Product
     implicit connection =>
       try
       {
-        SQL("SELECT * from product where product_supplier_srl = {srl} order by product_code desc limit 1")
+        SQL("SELECT * from product where product_supplier_srl = {srl} order by product_code desc, product_created desc limit 1")
           .on("srl"->id)
           .using(this.parser).single()
       } catch {
@@ -243,8 +243,6 @@ object Product
                           "product_purchase_price = {purchase_price}, " +
                           "product_sale_price = {sale_price}, " +
                           "product_stock = {stock}, " +
-                          "product_supplier_srl = {supplier_srl}, " +
-                          "product_manufacture_srl = {manufacture_srl}, " +
                           "product_updated = {updated} " +
                           "where product_srl = {srl} AND product_code = {code};")
       .on("name"->p.product_name,
@@ -253,8 +251,6 @@ object Product
           "purchase_price"->p.product_purchase_price,
           "sale_price"->p.product_sale_price,
           "stock"->p.product_stock,
-          "supplier_srl"->p.product_supplier_srl,
-          "manufacture_srl"->p.product_manufacture_srl,
           "updated"->p.product_updated,
           "srl"->p.product_srl.get,
           "code"->p.product_code).executeUpdate()
