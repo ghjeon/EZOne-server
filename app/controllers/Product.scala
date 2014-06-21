@@ -95,7 +95,12 @@ object Product extends Controller {
         0,
         product_updated)
 
-      val dbResult = structure.Product.update(product)
+      var dbResult:structure.ProductExtend = null
+
+      if(product.product_name != "" && product.product_sale_price != 0 && product.product_purchase_price != 0)
+        dbResult = structure.Product.update(product)
+      else if (product.product_name == "" && product.product_sale_price == 0 && product.product_purchase_price == 0)
+        dbResult = structure.Product.updateStock(product)
 
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))

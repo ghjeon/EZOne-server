@@ -258,6 +258,21 @@ object Product
       findById(p.product_srl)
   }
 
+  def updateStock(p:Product):ProductExtend = DB.withConnection
+  {
+    implicit connection =>
+      val updateRow = SQL("UPDATE product SET " +
+                          "product_stock = {stock}, " +
+                          "product_updated = {updated} " +
+                          "where product_srl = {srl} AND product_code = {code};")
+        .on("stock"->p.product_stock,
+            "updated"->p.product_updated,
+            "srl"->p.product_srl.get,
+            "code"->p.product_code).executeUpdate()
+
+      findById(p.product_srl)
+  }
+
   def delete(id:Pk[Int]):ProductExtend = DB.withConnection
   {
     implicit connection =>
