@@ -134,7 +134,7 @@ object Warehouse
     implicit connection =>
       try
       {
-        var query = SQL("SELECT * FROM warehouse_extend " +
+        val query = SQL("SELECT * FROM warehouse_extend " +
           "WHERE warehouse_products like {keyword} AND " +
                 "warehouse_updated >= {start} AND " +
                 "warehouse_updated <= {end};")
@@ -156,7 +156,9 @@ object Warehouse
           case _ => "String"
         }
 
-        var query = SQL("SELECT * FROM warehouse_extend WHERE " + target + " " + option + " {keyword} ORDER BY {orderBy} {orderTyoe};")
+        val query = SQL("SELECT * FROM warehouse_extend " +
+                    "WHERE " + target + " " + option + " {keyword} " +
+                    "ORDER BY {orderBy} " + util.db.validateOrderType(orderType) +";")
         if(keywordType == "String")
           query.on("keyword"->keyword, "orderBy"->orderBy, "orderType"->orderType).as(WarehouseExtend.parser *)
         else if(keywordType == "Int")
