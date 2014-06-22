@@ -161,7 +161,7 @@ object Warehouse extends Controller {
       if(optionEscape == "like")
         keywordEscape = "%" + keyword + "%"
       else keywordEscape = keyword
-      val dbResult = structure.Warehouse.findByOption("warehouse_" + target, keywordEscape, optionEscape)
+      val dbResult = structure.Warehouse.findByOption("warehouse_" + target, keywordEscape, optionEscape, orderBy, orderType)
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
       else
