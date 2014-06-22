@@ -144,7 +144,7 @@ object Warehouse
       }
   }
 
-  def findByOption(target:String, keyword:String, option:String):List[WarehouseExtend] = DB.withConnection
+  def findByOption(target:String, keyword:String, option:String, orderBy:String, orderType:String):List[WarehouseExtend] = DB.withConnection
   {
     implicit connection =>
       try
@@ -156,11 +156,11 @@ object Warehouse
           case _ => "String"
         }
 
-        var query = SQL("SELECT * FROM warehouse_extend WHERE " + target + " " + option + " {keyword};")
+        var query = SQL("SELECT * FROM warehouse_extend WHERE " + target + " " + option + " {keyword} ORDER BY {orderBy} {orderTyoe};")
         if(keywordType == "String")
-          query.on("keyword"->keyword).as(WarehouseExtend.parser *)
+          query.on("keyword"->keyword, "orderBy"->orderBy, "orderType"->orderType).as(WarehouseExtend.parser *)
         else if(keywordType == "Int")
-          query.on("keyword"->keyword.toInt).as(WarehouseExtend.parser *)
+          query.on("keyword"->keyword.toInt, "orderBy"->orderBy, "orderType"->orderType).as(WarehouseExtend.parser *)
         else
           null
       } catch {
