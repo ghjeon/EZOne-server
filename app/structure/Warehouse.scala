@@ -134,7 +134,7 @@ object Warehouse
     implicit connection =>
       try
       {
-        var query = SQL("SELECT * FROM warehouse " +
+        var query = SQL("SELECT * FROM warehouse_extend " +
           "WHERE warehouse_products like {keyword} AND " +
                 "warehouse_updated >= {start} AND " +
                 "warehouse_updated <= {end};")
@@ -156,7 +156,7 @@ object Warehouse
           case _ => "String"
         }
 
-        var query = SQL("SELECT * FROM warehouse WHERE " + target + " " + option + " {keyword};")
+        var query = SQL("SELECT * FROM warehouse_extend WHERE " + target + " " + option + " {keyword};")
         if(keywordType == "String")
           query.on("keyword"->keyword).as(WarehouseExtend.parser *)
         else if(keywordType == "Int")
