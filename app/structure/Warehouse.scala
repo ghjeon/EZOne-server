@@ -119,10 +119,9 @@ object Warehouse
         SQL("SELECT * FROM warehouse_extend " +
           "WHERE warehouse_updated >= {start} AND " +
                 "warehouse_updated <= {end} " +
-                "ORDER BY {orderBy} " + util.db.validateOrderType(orderType) + ";")
+                "ORDER BY " + orderBy + " " + util.db.validateOrderType(orderType) + ";")
         .on("start"->start,
-            "end"->end,
-            "orderBy"->orderBy)
+            "end"->end)
         .as(WarehouseExtend.parser *)
       } catch {
         case e=> null
@@ -158,11 +157,11 @@ object Warehouse
 
         val query = SQL("SELECT * FROM warehouse_extend " +
                     "WHERE " + target + " " + option + " {keyword} " +
-                    "ORDER BY {orderBy} " + util.db.validateOrderType(orderType) +";")
+                    "ORDER BY " + orderBy + " " + util.db.validateOrderType(orderType) + ";")
         if(keywordType == "String")
-          query.on("keyword"->keyword, "orderBy"->orderBy, "orderType"->orderType).as(WarehouseExtend.parser *)
+          query.on("keyword"->keyword, "orderType"->orderType).as(WarehouseExtend.parser *)
         else if(keywordType == "Int")
-          query.on("keyword"->keyword.toInt, "orderBy"->orderBy, "orderType"->orderType).as(WarehouseExtend.parser *)
+          query.on("keyword"->keyword.toInt, "orderType"->orderType).as(WarehouseExtend.parser *)
         else
           null
       } catch {
