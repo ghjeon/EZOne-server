@@ -108,6 +108,38 @@ object Product extends Controller {
         Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
   }
 
+  def modifyStock(id:Int) =  Action(parse.urlFormEncoded)
+  {
+    request =>
+      val body:Map[String, Seq[String]] = request.body
+
+      val product_srl = id
+      val product_code = body.getOrElse("code", util.dummy.dummyList)(0)
+      val product_stock = body.getOrElse("stock", util.dummy.dummyListInt)(0).toString.toInt
+      val product_updated = timestamp
+
+      val product = structure.Product(new Id(product_srl),
+        product_code,
+        "",
+        "",
+        "",
+        0,
+        0,
+        product_stock,
+        0,
+        0,
+        0,
+        product_updated)
+
+      var dbResult:structure.ProductExtend = null
+      dbResult = structure.Product.updateStock(product)
+
+      if(dbResult != null)
+        Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
+      else
+        Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
+  }
+
   def delete(id:Int) = Action
   {
     request =>

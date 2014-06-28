@@ -42,6 +42,7 @@ GET           /Manufacture/find/:target                  controllers.Manufacture
 
 POST          /Product/create                            controllers.Product.create()
 PUT           /Product/modify/:id                        controllers.Product.modify(id:Int)
+PUT           /Product/modify/stock/:id                  controllers.Product.modifyStock(id:Int)
 DELETE        /Product/delete/:id                        controllers.Product.delete(id:Int)
 GET           /Product/get/:id                           controllers.Product.get(id:Int)
 GET           /Product/list/:page                        controllers.Product.list(page:Int, count:Int, orderby:String, orderType:String)
