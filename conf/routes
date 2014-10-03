@@ -60,7 +60,6 @@ GET           /Bill/get/:id                              controllers.Bill.get(id
 GET           /Bill/list                                 controllers.Bill.list(start:Int, end:Int, orderBy:String, orderType:String)
 GET           /Bill/find/customer                        controllers.Bill.findByCustomerId(keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String)
 
-
 #Module RECEIPT
 
 #POST    /Receipt/create             controllers.Receipt.create()
@@ -88,3 +87,7 @@ GET           /Warehouse/get/:id                         controllers.Warehouse.g
 GET           /Warehouse/list                            controllers.Warehouse.list(start:Int, end:Int, orderBy:String, orderType:String)
 GET           /Warehouse/find/supplier                   controllers.Warehouse.findBySupplier(supplier:Int, start:Int, end:Int, orderBy:String, orderType:String)
 GET           /Warehouse/find/:target                    controllers.Warehouse.find(target:String, keyword:String, option:String, start:Int, end:Int, orderBy:String, orderType:String)
+
+#Module Front
+
+GET           /front/main                                controllers.Front.Main()
