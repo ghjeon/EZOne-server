@@ -80,7 +80,7 @@ overflow-y: auto;
                 data:$("#frmPayment").serialize(),
                 dataType:'json',
                 success:function(data) {
-                    if(data.status == 'OK')
+                    if(data.result == 'OK')
                     {
                         alert('정상적으로 처리되었습니다.');
                         $("#modPayment").modal('hide');
