@@ -39,6 +39,58 @@ overflow-y: auto;
 
 
     $(document).ready(function() {
+
+        $(".typeahead").on('focus', function(sender) {
+            $(sender.target).val("");
+            sender.target.focus();
+
+        });
+
+        $("#btnPaymentDo").on('click', function(sender) {
+            var no = 1;
+            var prdList = new Array();
+            var total = 0;
+            $.each($("#purchaseList tr"), function(idx, ele) {
+                $.each(productArray,function(index, product) {
+                    if(product.srl == ele.id)
+                    {
+                        var product_info = new Object();
+                        product_info.No = no;
+                        product_info.product_srl = parseInt(ele.id);
+                        product_info.product_code = product.code;
+                        product_info.product_name = product.name;
+                        product_info.product_sale_price = parseInt(product.price);
+                        product_info.product_count = parseInt($("#prdCount_" + ele.id).val());
+                        product_info.product_sale_price_total = product.price * product_info.product_count;
+                        prdList.push(product_info);
+                        no++;
+                    }
+                });
+            });
+            $.each(prdList, function(idx, prd) {
+                total += prd.product_sale_price_total;
+            });
+            $("input[name=info]").val(JSON.stringify(prdList));
+            $("input[name=amount]").val(total);
+            $("input[name=actual_amount]").val(total);
+            $("input[name=partial_amount").val(total);
+            $.ajax({
+                type:'POST',
+                url:'/Bill/create',
+                data:$("#frmPayment").serialize(),
+                dataType:'json',
+                success:function(data) {
+                    if(data.status == 'OK')
+                    {
+                        alert('정상적으로 처리되었습니다.');
+                        $("#modPayment").modal('hide');
+                    }
+                    else
+                        alert(data.message);
+                }
+            });
+        });
+
 	    $("#purchaseList").on('keyup', function(sender) {
 			var srl = sender.target.id.replace("prdCount_", "");
 			var count = parseInt($(sender.target).val())
@@ -46,7 +98,7 @@ overflow-y: auto;
 			{
 				if(count == 0)
 				{
-					
+				    $("#" + srl).remove();
 				}
 				else
 				{
@@ -60,14 +112,26 @@ overflow-y: auto;
 	    products.initialize();
 	    $('.typeahead').typeahead(null, 
 	    {
-	    displayKey: 'value',
-	    source: products.ttAdapter()
+	        displayKey: 'value',
+	        source: products.ttAdapter()
 	    })
 	    .bind('typeahead:selected', function(obj, selected, name) {
-	    	$("#purchaseList").append("<tr id='" + selected.srl + "'>" + "<td>" +  i + "</td>" + "<td>" + selected.code + "</td>" + "<td>" + selected.name + "</td>"  + "<td class='prdCountWrap'>" + "<input type='hidden' id='prdOrigPrice_" + selected.srl  + "' value='" + selected.price + "' /><input type='text' value='1' class='prdCount' id='prdCount_" + selected.srl + "'" + ">"  + "</td>" + "<td class='prdPrice' id='prdPrice_" + selected.srl + "'>" + selected.price + "</td>"  + "</tr>");
-	    	$(".typeahead").val("");
-	    	$("#prdCount_" + selected.srl).focus();
-	    	i++;
+            var isExist = false;
+            $.each(productArray, function(idx, prd) {
+                if(prd.srl == selected.srl)
+                {
+                    $("#prdCount_" + selected.srl).val(parseInt($("#prdCount_" + selected.srl).val()) + 1);
+                    isExist = true;
+                }
+            });
+            if(isExist == false) {
+                productArray.push(selected);
+                $("#purchaseList").append("<tr id='" + selected.srl + "'>" + "<td>" +  i + "</td>" + "<td>" + selected.code + "</td>" + "<td>" + selected.name + "</td>"  + "<td class='prdCountWrap'>" + "<input type='hidden' id='prdOrigPrice_" + selected.srl  + "' value='" + selected.price + "' /><input type='text' value='1' class='prdCount' id='prdCount_" + selected.srl + "'" + ">"  + "</td>" + "<td class='prdPrice' id='prdPrice_" + selected.srl + "'>" + selected.price + "</td>"  + "</tr>");
+                $(".typeahead").val("");
+                $("#prdCount_" + selected.srl).focus();
+                i++;
+            }
+
 	    });
     });
 </script>
@@ -147,7 +211,7 @@ overflow-y: auto;
 
                         </td>
                         <td>
-                            <input type="button" class="btn btn-primary" value="결제"  />
+                            <input type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modPayment" value="결제"  />
                         </td>
                         <td>
 
@@ -157,6 +221,37 @@ overflow-y: auto;
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modPayment" tabindex="-1" role="dialog" aria-labelledby="modPaymentLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">닫기</span></button>
+                    <h4 class="modal-title" id="modPaymentLabel">InAudio Payments</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="frmPayment">
+                        <input type="hidden" name="customer_srl" value="0" />
+                        <input type="hidden" name="member_srl" value="0" />
+                        <input type="hidden" name="info" value="" />
+                        <input type="hidden" name="type" value="N" />
+                        <input type="hidden" name="due" value="0" />
+                        <input type="hidden" name="isTaxReceipt" value="N" />
+                        <input type="hidden" name="amount" value="0" />
+                        <input type="hidden" name="actual_amount" value="0" />
+                        <input type="hidden" name="partial_amount" value="0" />
+                    </form>
+                    결제를 수행합니다. <br />
+                    TODO : 비가청 주파수 재생 및 Long-polling
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary" id="btnPaymentDo">결제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 
 @views.html.common.footer()
