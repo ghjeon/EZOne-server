@@ -100,6 +100,7 @@ object Bill extends Controller {
   {
     request =>
       val dbResult = structure.Bill.delete(id)
+
       if(dbResult != null)
         Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
       else
