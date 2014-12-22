@@ -189,6 +189,17 @@ object Bill {
 
       findBy(b.bill_srl)
   }
+
+  def delete(bill_srl:Int):Bill = DB.withConnection
+  {
+    implicit connection =>
+      val data = findBy(new Id(bill_srl))
+
+      SQL("DELETE FROM bill WHERE bill_srl = {bill_srl};")
+        .on("bill_srl"->bill_srl).execute()
+
+      data
+  }
 }
 
 object BillFormatter extends DefaultJsonProtocol

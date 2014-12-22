@@ -96,7 +96,15 @@ object Bill extends Controller {
         Ok(Json.obj("result"->"Fail", "code"->"410", "message"->"DATABASE_EXECUTION_EXCEPTION"))
   }
 
-  def delete(id:Int) = TODO
+  def delete(id:Int) = Action
+  {
+    request =>
+      val dbResult = structure.Bill.delete(id)
+      if(dbResult != null)
+        Ok(Json.obj("result"->"OK", "code"->"200", "data"->dbResult.toJson.toString))
+      else
+        Ok(Json.obj("result"->"Fail", "code"->"404", "message"->"NOT_FOUND"))
+  }
 
   def get(id:Int) = Action
   {
